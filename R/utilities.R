@@ -8,7 +8,7 @@
 read_bucket <- function(export_path) {
   col_types <- NULL
   as.data.table(dplyr::bind_rows(
-    purr::map(system2('gsutil', args = c('ls', export_path), stdout = TRUE, stderr = TRUE),
+    purrr::map(system2('gsutil', args = c('ls', export_path), stdout = TRUE, stderr = TRUE),
         function(csv) {
           chunk <- readr::read_csv(pipe(str_glue('gsutil cat {csv}')), col_types = col_types, show_col_types = FALSE)
           if (is.null(col_types)) {
