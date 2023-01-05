@@ -37,7 +37,7 @@ last_medical_encounter <- function(output_folder)
         GROUP BY person_id
         )
 
-        SELECT person_id, MAX(date) as last_medical_encounter
+        SELECT person_id, MAX(date) as last_medical_encounter_entry_date
         FROM ehr
         GROUP BY person_id
         ")
