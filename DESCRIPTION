@@ -11,6 +11,7 @@ Imports:
   bigrquery,
   dplyr,
   purrr,
-  readr
+  readr,
+  lubridate
 LazyData: true
 RoxygenNote: 7.1.1

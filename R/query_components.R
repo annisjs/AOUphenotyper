@@ -57,7 +57,6 @@ high_bp_query <- function(dataset)
   return(result)
 }
 
-
 icd9_query <- function(dataset,icd9_codes)
 {
   icd9_terms <- paste('co.CONDITION_SOURCE_VALUE LIKE ',"'",icd9_codes,"'",collapse=' OR ',sep="")
@@ -92,29 +91,6 @@ icd10_query <- function(dataset,icd10_codes)
   download_data(query)
 }
 
-inpatient_icd_query <- function(dataset,codes)
-{
-  code_clause <- paste('co.CONDITION_SOURCE_VALUE LIKE ',"'",codes,"'",collapse=' OR ',sep="")
-  query <- str_glue(
-    "SELECT co.person_id,co.condition_start_date,co.condition_source_value
-        FROM
-            `{dataset}.condition_occurrence` co
-            INNER JOIN
-            `{dataset}.concept` c
-            ON (co.condition_source_concept_id = c.concept_id)
-        WHERE
-            c.vocabulary_id LIKE 'ICD%' AND
-            ({code_clause}) AND
-            co.condition_type_concept_id IN (38000200,38000201,
-            38000202,38000203,38000204,38000205,38000214,
-            38000206,38000207,38000208,38000209,38000210,
-            38000211,38000212,38000213)
-        ")
-  download_data(query)
-}
-
-
-
 lab_query_concept_id <- function(dataset,labs)
 {
   labs <- paste0("'",paste(labs,sep="",collapse="','"),"'")
@@ -141,26 +117,6 @@ lab_query <- function(dataset,labs)
 }
 
 med_query <- function(dataset,meds)
-{
-  med_terms1 <- paste('lower(c.concept_name) LIKE ',"'%",meds,"%'",collapse=' OR ',sep="")
-  med_concept_id_query <- str_glue("
-        SELECT DISTINCT c.concept_id
-        FROM {dataset}.concept c
-        WHERE {med_terms1}
-    ")
-  med_terms_result <- download_data(med_concept_id_query)$concept_id
-  med_terms <- paste0(paste(med_terms_result,sep="",collapse=","))
-  query <-   str_glue("
-       SELECT DISTINCT d.person_id,d.drug_exposure_start_date
-        FROM
-        {dataset}.drug_exposure d
-        WHERE
-        d.drug_concept_id IN ({med_terms})
-    ")
-  download_data(query)
-}
-
-med_query2 <- function(dataset,meds)
 {
   med_terms <- paste('lower(c.concept_name) LIKE ',"'%",meds,"%'",collapse=' OR ',sep="")
   query <- str_glue("
@@ -193,28 +149,7 @@ med_query_min_date <- function(dataset,meds)
   download_data(query)
 }
 
-outpatient_icd_query <- function(dataset,codes)
-{
-  code_clause <- paste('co.CONDITION_SOURCE_VALUE LIKE ',"'",codes,"'",collapse=' OR ',sep="")
-  query <- str_glue(
-    "SELECT co.person_id,co.condition_start_date,co.condition_source_value
-        FROM
-            {dataset}.condition_occurrence co
-            INNER JOIN
-            {dataset}.concept c
-            ON (co.condition_source_concept_id = c.concept_id)
-        WHERE
-            c.vocabulary_id LIKE 'ICD%' AND
-            ({code_clause}) AND
-            co.condition_type_concept_id IN (38000230,38000231,
-            38000232,38000233,38000234,38000235,38000236,
-            38000237,38000238,38000239,38000240,38000241,
-            38000242,38000243,38000244)
-        ")
-  download_data(query)
-}
-
-inpatient_icd_query2 <- function(dataset,codes)
+inpatient_icd_query <- function(dataset,codes)
 {
   code_clause <- paste('co.CONDITION_SOURCE_VALUE LIKE ',"'",codes,"'",collapse=' OR ',sep="")
   query <- str_glue(
@@ -239,7 +174,7 @@ inpatient_icd_query2 <- function(dataset,codes)
   download_data(query)
 }
 
-outpatient_icd_query2 <- function(dataset,codes)
+outpatient_icd_query <- function(dataset,codes)
 {
   code_clause <- paste('co.CONDITION_SOURCE_VALUE LIKE ',"'",codes,"'",collapse=' OR ',sep="")
   query <- str_glue(
