@@ -2,7 +2,7 @@
 #' @export
 #' @return output_folder/closest_height.csv
 #' @import data.table stringr bigrquery
-closest_height <- function(dataset,anchor_date_table=NULL,before=NULL,after=NULL,output_folder)
+closest_height <- function(dataset,output_folder,anchor_date_table=NULL,before=NULL,after=NULL)
 {
   query <- str_glue("
         SELECT

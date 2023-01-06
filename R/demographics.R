@@ -1,7 +1,7 @@
 #' Demographics
 #' @export
 #' @return output_folder/demographics_*.csv
-#' @import stringr bigrquery
+#' @import stringr data.table bigrquery
 demographics <- function(dataset,output_folder,anchor_date_table=NULL,before=NULL,after=NULL)
 {
   dem_query <- str_glue("
@@ -27,14 +27,14 @@ demographics <- function(dataset,output_folder,anchor_date_table=NULL,before=NUL
             ON person.sex_at_birth_concept_id = p_sex_at_birth_concept.concept_id", sep="")
   bq_table_save(
     bq_dataset_query(Sys.getenv("WORKSPACE_CDR"), dem_query, billing = Sys.getenv("GOOGLE_PROJECT")),
-    paste0(output_folder,"/demographics_*.csv"),
+    paste0(output_folder,"/aou_phenotyper/demographics_*.csv"),
     destination_format = "CSV")
   result <- read_bucket(paste0(output_folder,"/aou_phenotyper/demographics_*.csv"))
   if (!is.null(anchor_date_table))
   {
     result <- as.data.table(merge(result,anchor_date_table,by="person_id"))
-    result <- result[,c("person_id","date_of_birth","race","ethnicity","sex")]
   }
+  result <- result[,c("person_id","date_of_birth","race","ethnicity","sex")]
   fwrite(result,file="demographics.csv")
   system(str_glue("gsutil cp demographics.csv {output_folder}/demographics.csv"),intern=TRUE)
   system(str_glue("gsutil rm {output_folder}/aou_phenotyper/*"),intern=TRUE)

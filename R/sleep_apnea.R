@@ -2,7 +2,7 @@
 #' @export
 #' @return output_folder/sleep_apnea.csv
 #' @import data.table stringr
-sleep_apnea <- function(dataset,anchor_date_table=NULL,before=NULL,after=NULL,output_folder)
+sleep_apnea <- function(dataset,output_folder,anchor_date_table=NULL,before=NULL,after=NULL)
 {
 
   icd9_codes <- c("780.51","780.53","780.57","327.2%")

@@ -2,7 +2,7 @@
 #' @export
 #' @return output_folder/closest_sbp.csv
 #' @import data.table stringr bigrquery
-closest_sbp <-  function(dataset,anchor_date_table=NULL,before=NULL,after=NULL,output_folder)
+closest_sbp <-  function(dataset,output_folder,anchor_date_table=NULL,before=NULL,after=NULL)
 {
   query <- str_glue("
     SELECT
@@ -51,9 +51,9 @@ closest_sbp <-  function(dataset,anchor_date_table=NULL,before=NULL,after=NULL,o
 
   bq_table_save(
     bq_dataset_query(Sys.getenv("WORKSPACE_CDR"), query, billing = Sys.getenv("GOOGLE_PROJECT")),
-    paste0(output_folder,"/sbp_*.csv"),
+    paste0(output_folder,"/aou_phenotyper/sbp_*.csv"),
     destination_format = "CSV")
-  result_all <- as.data.table(read_bucket(str_glue("{output_folder}/sbp_*.csv")))
+  result_all <- as.data.table(read_bucket(str_glue("{output_folder}/aou_phenotyper/sbp_*.csv")))
   if (!is.null(anchor_date_table))
   {
     result_all <- as.data.table(merge(result_all,anchor_date_table,by="person_id"))
@@ -68,4 +68,5 @@ closest_sbp <-  function(dataset,anchor_date_table=NULL,before=NULL,after=NULL,o
                               closest_sbp_value = value_as_number[1]),.(person_id)]
   fwrite(result_all,file="closest_sbp.csv")
   system(str_glue("gsutil cp closest_sbp.csv {output_folder}/closest_sbp.csv"),intern=TRUE)
+  system(str_glue("gsutil rm {output_folder}/aou_phenotyper/*"),intern=TRUE)
 }

@@ -1,8 +1,8 @@
 #' Last Medical Encounter
 #' @export
 #' @return output_folder/last_medical_encounter_*.csv
-#' @import stringr bigrquery
-last_medical_encounter <- function(output_folder)
+#' @import stringr bigrquery data.table
+last_medical_encounter <- function(dataset,output_folder,anchor_date_table=NULL,before=NULL,after=NULL)
 {
   query <- str_glue("
         WITH ehr AS (
@@ -44,6 +44,19 @@ last_medical_encounter <- function(output_folder)
 
   bq_table_save(
     bq_dataset_query(Sys.getenv("WORKSPACE_CDR"), query, billing = Sys.getenv("GOOGLE_PROJECT")),
-    paste0(output_folder,"/last_medical_encounter_*.csv"),
+    paste0(output_folder,"/aou_phenotyper/last_medical_encounter_*.csv"),
     destination_format = "CSV")
+  result <- read_bucket(paste0(output_folder,"/aou_phenotyper/last_medical_encounter_*.csv"))
+  if (!is.null(anchor_date_table))
+  {
+    result <- as.data.table(merge(result,anchor_date_table,by="person_id"))
+    result[,min_window_date := anchor_date - before]
+    result[,max_window_date := anchor_date + after]
+    result <- result[last_medical_encounter_entry_date >= min_window_date]
+    result <- result[last_medical_encounter_entry_date <= max_window_date]
+  }
+  result <- result[,c("person_id","last_medical_encounter_entry_date")]
+  fwrite(result,file="last_medical_encounter.csv")
+  system(str_glue("gsutil cp last_medical_encounter.csv {output_folder}/last_medical_encounter.csv"),intern=TRUE)
+  system(str_glue("gsutil rm {output_folder}/aou_phenotyper/*"),intern=TRUE)
 }

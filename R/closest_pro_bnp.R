@@ -2,7 +2,7 @@
 #' @export
 #' @return output_folder/closest_pro_bnp.csv
 #' @import data.table stringr
-closest_pro_bnp <- function(dataset,anchor_date_table=NULL,before=NULL,after=NULL,output_folder)
+closest_pro_bnp <- function(dataset,output_folder,anchor_date_table=NULL,before=NULL,after=NULL)
 {
   result_all <- lab_query(dataset,"Natriuretic peptide.B prohormone N-Terminal [Mass/volume] in Serum or Plasma")
   if (!is.null(anchor_date_table))

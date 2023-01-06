@@ -2,7 +2,7 @@
 #' @export
 #' @return output_folder/diabetes.csv
 #' @import data.table stringr
-diabetes <- function(dataset,anchor_date_table=NULL,before=NULL,after=NULL,output_folder)
+diabetes <- function(dataset,output_folder,anchor_date_table=NULL,before=NULL,after=NULL)
 {
   condition_codes_t1d_icd9 <- c('250.01', '250.11', '250.21', '250.31', '250.41', '250.51', '250.61', '250.71',
                                 '250.81', '250.91', '250.03', '250.13', '250.23', '250.33', '250.43', '250.53',

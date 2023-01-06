@@ -2,7 +2,7 @@
 #' @export
 #' @return output_folder/mineralocorticoid_antagonists.csv
 #' @import data.table stringr
-mineralocorticoid_antagonists <- function(dataset,anchor_date_table=NULL,before=NULL,after=NULL,output_path)
+mineralocorticoid_antagonists <- function(dataset,output_path,anchor_date_table=NULL,before=NULL,after=NULL)
 {
   require(data.table)
   require(stringr)

@@ -1,24 +1,33 @@
 #' Smoking
 #' @export
 #' @return output_folder/smoking_*.csv
-#' @import data.table stringr bigrquery
-smoking <- function(output_folder)
+#' @import data.table stringr
+smoking <- function(dataset,output_folder,anchor_date_table=NULL,before=NULL,after=NULL)
 {
-  smoking_query <- paste("
+  smoking_query <- str_glue("
         SELECT
             answer.person_id,
-            answer.answer
+            answer.answer AS smoking_status,
+            CAST(answer.survey_datetime AS DATE) AS smoking_entry_date
         FROM
-            `ds_survey` answer
+            `{dataset}.ds_survey` answer
         WHERE
             (
                 question_concept_id IN (
                     1585857
                 )
-            )", sep="")
+            )")
 
-  bq_table_save(
-    bq_dataset_query(Sys.getenv("WORKSPACE_CDR"), smoking_query, billing = Sys.getenv("GOOGLE_PROJECT")),
-    paste0(output_folder,"/smoking_*.csv"),
-    destination_format = "CSV")
+  result <- download_data(smoking_query)
+  if (!is.null(anchor_date_table))
+  {
+    result <- as.data.table(merge(result,anchor_date_table,by="person_id"))
+    result[,min_window_date := anchor_date - before]
+    result[,max_window_date := anchor_date + after]
+    result <- result[smoking_entry_date >= min_window_date]
+    result <- result[smoking_entry_date <= max_window_date]
+  }
+  result <- result[,c("person_id","smoking_entry_date","smoking_status")]
+  fwrite(result,file="smoking.csv")
+  system(str_glue("gsutil cp smoking.csv {output_folder}/smoking.csv"),intern=TRUE)
 }

@@ -2,7 +2,7 @@
 #' @export
 #' @return output_folder/obesity.csv
 #' @import data.table stringr
-obesity <- function(dataset,anchor_date_table=NULL,before=NULL,after=NULL,output_folder)
+obesity <- function(dataset,output_folder,anchor_date_table=NULL,before=NULL,after=NULL)
 {
   icd9_codes <- c("278.0%","278.1%","V85.3%","V85.4%")
   icd10_codes <- c("E66","E66.%")

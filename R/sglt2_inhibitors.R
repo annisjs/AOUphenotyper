@@ -2,7 +2,7 @@
 #' @export
 #' @return output_folder/sglt2_inhibitors.csv
 #' @import data.table stringr
-sglt2_inhibitors <- function(dataset,anchor_date_table=NULL,before=NULL,after=NULL,output_path)
+sglt2_inhibitors <- function(dataset,output_path,anchor_date_table=NULL,before=NULL,after=NULL)
 {
   require(data.table)
   require(stringr)

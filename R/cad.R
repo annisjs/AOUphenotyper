@@ -2,7 +2,7 @@
 #' @export
 #' @return output_folder/cad.csv
 #' @import data.table stringr
-cad <- function(dataset,anchor_date_table=NULL,before=NULL,after=NULL,output_folder)
+cad <- function(dataset,output_folder,anchor_date_table=NULL,before=NULL,after=NULL)
 {
   icd9_codes = c("410","410.%","411","411.%","412","412.%","413","413.%","414","414.%","V45.82")
   icd10_codes = c("I25.1%")

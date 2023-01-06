@@ -2,7 +2,7 @@
 #' @export
 #' @return output_folder/copd.csv
 #' @import data.table stringr
-copd <- function(dataset,anchor_date_table=NULL,before=NULL,after=NULL,output_folder)
+copd <- function(dataset,output_folder,anchor_date_table=NULL,before=NULL,after=NULL)
 {
   icd9_codes <- c("491","491.0","491.1","491.2","491.20","491.21","491.22","491.8","491.9","492","492.0","492.8","496","496.0","493.21","493.22")
   icd10_codes <- c("J44.%","J43.%","J42","J41.%")

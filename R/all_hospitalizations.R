@@ -1,8 +1,8 @@
 #' All hospitalizations
 #' @export
 #' @return output_folder/all_hospitalizations.csv
-#' @import stringr bigrquery
-all_hospitalizations <-  function(dataset,output_folder,anchor_date_table=NULL,before=NULL,after=NULL)
+#' @import stringr bigrquery data.table
+all_hospitalizations <- function(dataset,output_folder,anchor_date_table=NULL,before=NULL,after=NULL)
 {
   query <- str_glue("
       SELECT  co.person_id,

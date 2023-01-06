@@ -2,7 +2,7 @@
 #' @export
 #' @return output_folder/heart_failure.csv
 #' @import data.table stringr
-heart_failure <- function(dataset,anchor_date_table=NULL,before=NULL,after=NULL,output_folder)
+heart_failure <- function(dataset,output_folder,anchor_date_table=NULL,before=NULL,after=NULL)
 {
   # Pull inpatient and outpatient codes
   codes <- c("425","425.%","428","428.%","I42","I42.%","I50","I50.%")

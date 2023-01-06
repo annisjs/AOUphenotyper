@@ -2,7 +2,7 @@
 #' @export
 #' @return output_folder/hyperlipidemia.csv
 #' @import data.table stringr
-hyperlipidemia <- function(dataset,anchor_date_table=NULL,before=NULL,after=NULL,output_folder)
+hyperlipidemia <- function(dataset,output_folder,anchor_date_table=NULL,before=NULL,after=NULL)
 {
   icd9_codes <- c("272.%")
   icd10_codes <- c("E78.%", "E88.%")

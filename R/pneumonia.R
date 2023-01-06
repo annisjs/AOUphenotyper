@@ -2,7 +2,7 @@
 #' @export
 #' @return output_folder/asthma.csv
 #' @import data.table stringr
-pneumonia <- function(dataset,anchor_date_table=NULL,before=NULL,after=NULL,output_folder)
+pneumonia <- function(dataset,output_folder,anchor_date_table=NULL,before=NULL,after=NULL)
 {
   icd9_codes <- c("480","480.%","481","481.%","482","482.%","483","483.%","484","484.%","485","485.%","486","486.%","487","487.%","488","488.%")
   icd10_codes <- c("J18.%")

@@ -2,7 +2,7 @@
 #' @export
 #' @return output_folder/closest_weight.csv
 #' @import data.table stringr bigrquery
-closest_weight <- function(dataset,anchor_date_table=NULL,before=NULL,after=NULL,output_folder)
+closest_weight <- function(dataset,output_folder,anchor_date_table=NULL,before=NULL,after=NULL)
 {
   query <- str_glue("
         SELECT
@@ -55,9 +55,9 @@ closest_weight <- function(dataset,anchor_date_table=NULL,before=NULL,after=NULL
 
   bq_table_save(
     bq_dataset_query(Sys.getenv("WORKSPACE_CDR"), query, billing = Sys.getenv("GOOGLE_PROJECT")),
-    paste0(output_folder,"/weight_*.csv"),
+    paste0(output_folder,"/aou_phenotyper/weight_*.csv"),
     destination_format = "CSV")
-  result_all <- as.data.table(read_bucket(str_glue("{output_folder}/weight_*.csv")))
+  result_all <- as.data.table(read_bucket(str_glue("{output_folder}/aou_phenotyper/weight_*.csv")))
   if (!is.null(anchor_date_table))
   {
     result_all <- as.data.table(merge(result_all,anchor_date_table,by="person_id"))
@@ -73,4 +73,5 @@ closest_weight <- function(dataset,anchor_date_table=NULL,before=NULL,after=NULL
                               closest_weight_unit = unit_concept_name[1]),.(person_id)]
   data.table::fwrite(result_all,file="closest_weight.csv")
   system(str_glue("gsutil cp closest_weight.csv {output_folder}/closest_weight.csv"),intern=TRUE)
+  system(str_glue("gsutil rm {output_folder}/aou_phenotyper/*"),intern=TRUE)
 }
