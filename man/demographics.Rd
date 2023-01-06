@@ -4,7 +4,13 @@
 \alias{demographics}
 \title{Demographics}
 \usage{
-demographics(output_folder)
+demographics(
+  dataset,
+  output_folder,
+  anchor_date_table = NULL,
+  before = NULL,
+  after = NULL
+)
 }
 \value{
 output_folder/demographics_*.csv

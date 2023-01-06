@@ -4,10 +4,16 @@
 \alias{all_hospitalizations}
 \title{All hospitalizations}
 \usage{
-all_hospitalizations(output_folder)
+all_hospitalizations(
+  dataset,
+  output_folder,
+  anchor_date_table = NULL,
+  before = NULL,
+  after = NULL
+)
 }
 \value{
-output_folder/all_hospitalizations_*.csv
+output_folder/all_hospitalizations.csv
 }
 \description{
 All hospitalizations
