@@ -1,8 +1,8 @@
-#' Hospitalization
+#' All hospitalizations
 #' @export
-#' @return output_folder/hospitalization_*.csv
+#' @return output_folder/all_hospitalizations_*.csv
 #' @import stringr bigrquery
-hospitalization <- function(output_folder)
+all_hospitalizations <- function(output_folder)
 {
   query <- str_glue("
       WITH cohort AS (
@@ -39,6 +39,6 @@ hospitalization <- function(output_folder)
 
   bq_table_save(
     bq_dataset_query(Sys.getenv("WORKSPACE_CDR"), query, billing = Sys.getenv("GOOGLE_PROJECT")),
-    paste0(output_folder,"/hospitalization_*.csv"),
+    paste0(output_folder,"/all_hospitalizations_*.csv"),
     destination_format = "CSV")
 }
