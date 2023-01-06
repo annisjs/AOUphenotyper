@@ -36,6 +36,7 @@ copd <- function(dataset,anchor_date_table=NULL,before=NULL,after=NULL,output_fo
   result_all <- result_all[,.(copd_entry_date = min(c(icd_entry_date,med_entry_date)),
                               copd_status = med_status & icd_status),
                            .(person_id)]
+  result_all[,copd_status = ifelse(is.na(copd_status),FALSE,copd_status)]
   fwrite(result_all,file="copd.csv")
   system(str_glue("gsutil cp copd.csv {output_folder}/copd.csv"),intern=TRUE)
 }
