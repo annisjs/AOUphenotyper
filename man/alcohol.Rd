@@ -4,7 +4,13 @@
 \alias{alcohol}
 \title{Alcohol}
 \usage{
-alcohol(output_folder)
+alcohol(
+  dataset,
+  output_folder,
+  anchor_date_table = NULL,
+  before = NULL,
+  after = NULL
+)
 }
 \arguments{
 \item{output_folder}{}

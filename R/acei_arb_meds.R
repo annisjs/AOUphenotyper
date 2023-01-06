@@ -4,7 +4,7 @@
 #' @export
 #'
 #' @import data.table stringr
-acei_arb_meds <- function(dataset,anchor_date_table=NULL,before=NULL,after=NULL,output_path)
+acei_arb_meds <- function(dataset,output_folder,anchor_date_table=NULL,before=NULL,after=NULL)
 {
   #acei
   meds <- c("fosinopril", "fosinopril sodium","monopril", "ramipril", "altace", "captopril", "capoten", "moexipril", "univasc", "lisinopril", "zestril", "prinivil", "enalapril", "vasotec", "epaned", "quinapril", "accupril", "trandolapril", "mavik", "gopten", "odrik", "benazepril", "lotensin", "perindopril", "aceon")

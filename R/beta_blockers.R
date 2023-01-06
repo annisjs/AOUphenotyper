@@ -4,7 +4,7 @@
 #' @export
 #'
 #' @import data.table stringr
-beta_blockers <- function(dataset,anchor_date_table=NULL,before=NULL,after=NULL,output_path)
+beta_blockers <- function(dataset,output_folder,anchor_date_table=NULL,before=NULL,after=NULL)
 {
   meds <- c("betaxolol", "kerlone", "betoptic", "acebutolol", "sectral", "atenolol", "tenormin", "metoprolol", "metoprolol succinate", "toprol-xl", "metoprolol tartrate", "lopressor", "metoprolol succinate er", "metoprolol tartrate", "dutoprolol", "nebivolol", "bystolic", "bisoprolol", "zebeta", "esmolol", "brevibloc", "propranolol", "innopran xl", "inderal", "inderal la", "nadolol", "corgard", "carvedilol", "coreg", "coreg cr", "labetalol", "normodyne", "trandate", "timolol", "blocadren", "timoptic", "istalol", "betimol", "carteolol", "cartrol", "penbutolol", "levatol", "pindolol", "visken")
   result <- med_query(dataset,meds)
