@@ -4,7 +4,13 @@
 \alias{wear_time}
 \title{Fitbit wear time}
 \usage{
-wear_time(output_folder)
+wear_time(
+  dataset,
+  output_folder,
+  anchor_date_table = NULL,
+  before = NULL,
+  after = NULL
+)
 }
 \value{
 output_folder/wear_time_*.csv

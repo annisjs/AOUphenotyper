@@ -4,10 +4,16 @@
 \alias{education}
 \title{Education}
 \usage{
-education(output_folder)
+education(
+  dataset,
+  output_folder,
+  anchor_date_table = NULL,
+  before = NULL,
+  after = NULL
+)
 }
 \value{
-output_folder/education_*.csv
+output_folder/education.csv
 }
 \description{
 Education

@@ -16,7 +16,7 @@ alcohol(
 \item{output_folder}{}
 }
 \value{
-CSV saved to output_folder/alcohol_*.csv
+CSV saved to output_folder/alcohol.csv
 }
 \description{
 Alcohol

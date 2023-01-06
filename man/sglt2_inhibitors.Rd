@@ -6,10 +6,10 @@
 \usage{
 sglt2_inhibitors(
   dataset,
+  output_path,
   anchor_date_table = NULL,
   before = NULL,
-  after = NULL,
-  output_path
+  after = NULL
 )
 }
 \value{

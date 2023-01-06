@@ -4,7 +4,13 @@
 \alias{smoking}
 \title{Smoking}
 \usage{
-smoking(output_folder)
+smoking(
+  dataset,
+  output_folder,
+  anchor_date_table = NULL,
+  before = NULL,
+  after = NULL
+)
 }
 \value{
 output_folder/smoking_*.csv

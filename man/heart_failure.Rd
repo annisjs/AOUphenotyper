@@ -6,10 +6,10 @@
 \usage{
 heart_failure(
   dataset,
+  output_folder,
   anchor_date_table = NULL,
   before = NULL,
-  after = NULL,
-  output_folder
+  after = NULL
 )
 }
 \value{

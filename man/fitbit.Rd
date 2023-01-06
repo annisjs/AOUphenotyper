@@ -4,7 +4,13 @@
 \alias{fitbit}
 \title{Fitbit}
 \usage{
-fitbit(output_folder)
+fitbit(
+  dataset,
+  output_folder,
+  anchor_date_table = NULL,
+  before = NULL,
+  after = NULL
+)
 }
 \value{
 output_folder/fitbit_*.csv

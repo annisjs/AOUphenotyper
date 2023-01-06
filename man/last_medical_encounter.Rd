@@ -4,7 +4,13 @@
 \alias{last_medical_encounter}
 \title{Last Medical Encounter}
 \usage{
-last_medical_encounter(output_folder)
+last_medical_encounter(
+  dataset,
+  output_folder,
+  anchor_date_table = NULL,
+  before = NULL,
+  after = NULL
+)
 }
 \value{
 output_folder/last_medical_encounter_*.csv
