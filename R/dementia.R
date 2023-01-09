@@ -4,8 +4,8 @@
 #' @import data.table stringr
 dementia <- function(dataset,output_folder,anchor_date_table=NULL,before=NULL,after=NULL)
 {
-  icd9_codes <- c("530.11","530.81")
-  icd10_codes <- c("K21","K21.%")
+  icd9_codes <- c("331.0","331.82","290.4","290.40","290.41","290.42","290.43")
+  icd10_codes <- c("G30","F00","G30.0","G30.1","G30.8","G30.9","F00.0","F00.1","F00.2","F00.9","G31.8","F02.8","F01","F01.0","F01.1","F01.2","F01.3","F01.8","F01.9")
   result_icd9 <- icd9_query(dataset,icd9_codes)
   result_icd10 <- icd10_query(dataset,icd10_codes)
   result_all <- rbind(result_icd9,result_icd10)
