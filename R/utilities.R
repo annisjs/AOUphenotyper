@@ -19,6 +19,12 @@ read_bucket <- function(export_path) {
         })))
 }
 
+#' Download data given query
+#'
+#' @param a SQL query string
+#'
+#' @return a data.table
+#' @export
 #' @import data.table bigrquery
 download_data <- function(query) {
   tb <- bq_project_query(Sys.getenv('GOOGLE_PROJECT'), query)
