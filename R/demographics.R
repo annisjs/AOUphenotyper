@@ -26,7 +26,7 @@ demographics <- function(dataset,output_folder,anchor_date_table=NULL,before=NUL
         `concept` p_sex_at_birth_concept
             ON person.sex_at_birth_concept_id = p_sex_at_birth_concept.concept_id", sep="")
   bq_table_save(
-    bq_dataset_query(Sys.getenv("WORKSPACE_CDR"), dem_query, billing = Sys.getenv("GOOGLE_PROJECT")),
+    bq_dataset_query(dataset, dem_query, billing = Sys.getenv("GOOGLE_PROJECT")),
     paste0(output_folder,"/aou_phenotyper/demographics_*.csv"),
     destination_format = "CSV")
   result <- read_bucket(paste0(output_folder,"/aou_phenotyper/demographics_*.csv"))

@@ -28,7 +28,7 @@ all_hospitalizations <- function(dataset,output_folder,anchor_date_table=NULL,be
   ")
 
   bq_table_save(
-    bq_dataset_query(Sys.getenv("WORKSPACE_CDR"), query, billing = Sys.getenv("GOOGLE_PROJECT")),
+    bq_dataset_query(dataset, query, billing = Sys.getenv("GOOGLE_PROJECT")),
     paste0(output_folder,"/aou_phenotyper/all_hospitalizations_*.csv"),
     destination_format = "CSV")
   result <- read_bucket(paste0(output_folder,"/aou_phenotyper/all_hospitalizations_*.csv"))

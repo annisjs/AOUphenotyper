@@ -54,7 +54,7 @@ closest_weight <- function(dataset,output_folder,anchor_date_table=NULL,before=N
                     ON measurement.unit_concept_id = m_unit.concept_id")
 
   bq_table_save(
-    bq_dataset_query(Sys.getenv("WORKSPACE_CDR"), query, billing = Sys.getenv("GOOGLE_PROJECT")),
+    bq_dataset_query(dataset, query, billing = Sys.getenv("GOOGLE_PROJECT")),
     paste0(output_folder,"/aou_phenotyper/weight_*.csv"),
     destination_format = "CSV")
   result_all <- as.data.table(read_bucket(str_glue("{output_folder}/aou_phenotyper/weight_*.csv")))

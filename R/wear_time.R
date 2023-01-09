@@ -12,7 +12,7 @@ wear_time <- function(dataset,output_folder,anchor_date_table=NULL,before=NULL,a
         GROUP BY date, person_id
 ")
   bq_table_save(
-    bq_dataset_query(Sys.getenv("WORKSPACE_CDR"), query, billing = Sys.getenv("GOOGLE_PROJECT")),
+    bq_dataset_query(dataset, query, billing = Sys.getenv("GOOGLE_PROJECT")),
     paste0(output_folder,"/aou_phenotyper/wear_time_*.csv"),
     destination_format = "CSV")
   result <- read_bucket(paste0(output_folder,"/aou_phenotyper/wear_time_*.csv"))
