@@ -1,3 +1,5 @@
+
+
 #' Read bucket
 #'
 #' @param export_path
@@ -17,9 +19,10 @@ read_bucket <- function(export_path) {
         })))
 }
 
+#' @import data.table bigrquery
 download_data <- function(query) {
-  tb <- bigrquery::bq_project_query(Sys.getenv('GOOGLE_PROJECT'), query)
-  bigrquery::bq_table_download(tb,page_size=100000)
+  tb <- bq_project_query(Sys.getenv('GOOGLE_PROJECT'), query)
+  as.data.table(bq_table_download(tb,page_size=100000))
 }
 
 #' gsutil ls
