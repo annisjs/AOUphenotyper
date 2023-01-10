@@ -66,3 +66,31 @@ cp_from_bucket <- function(from,to)
   bucket <- Sys.getenv("WORKSPACE_BUCKET")
   system(str_glue("gsutil cp {bucket}/{from} {to}"),intern=TRUE)
 }
+
+#' Recode race to White, Black, Other
+#' @export
+recode_race_wbo <- function(race)
+{
+  ifelse(race == "I prefer not to answer" |
+         race == "None of these" |
+         race == "None Indicated",
+       NA,
+       ifelse(race == "Black or African American",
+              "Black",
+              ifelse(race == "White",
+                     "White",
+                     "Other")))
+}
+
+#' Recode sex to Male, Female
+#' @export
+recode_sex_fm <- function(sex)
+{
+  ifelse(sex == "Not male, not female, prefer not to answer, or skipped" |
+           sex == "No matching concept",
+         NA,
+         ifelse(sex == "Male",
+                "Male",
+                "Female"))
+}
+

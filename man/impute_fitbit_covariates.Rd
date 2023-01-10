@@ -4,7 +4,7 @@
 \alias{impute_fitbit_covariates}
 \title{Impute covariates for time-varying fitbit dataset}
 \usage{
-impute_fitbit_covariates(fitbit_formatted, merged_covariates)
+impute_fitbit_covariates(fitbit_formatted, covariates)
 }
 \arguments{
 \item{fitbit_formatted}{the data.table output from format_fitbit_cox}
