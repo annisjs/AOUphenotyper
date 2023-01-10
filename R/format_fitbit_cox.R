@@ -11,6 +11,8 @@ format_fitbit_cox <- function(fitbit,dx,last_medical_encounter)
 {
 
   merged_cox <- merge(fitbit,dx,by="person_id",all.x=TRUE)
+  merged_cox[, had_before := as.numeric(dx_entry_date - min(date)) <= 180, .(person_id)]
+  merged_cox <- merged_cox[had_before == FALSE | is.na(had_before)]
   merged_cox <- merge(merged_cox,last_medical_encounter,all.x=TRUE)
   merged_cox[,dx_status := ifelse(is.na(dx_entry_date),FALSE,dx_entry_date)]
 
