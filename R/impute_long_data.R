@@ -4,7 +4,7 @@
 #' @param merged_covariates a data.table with a "person_id" column and any other covariates. Must have same person_ids as dat_long.
 #'
 #' @return a mids object object
-#' @import Hmisc
+#' @import Hmisc mice
 #' @export
 #'
 impute_long_data <- function(dat_long,covariates)
