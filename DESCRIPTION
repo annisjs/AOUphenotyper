@@ -12,6 +12,7 @@ Imports:
   dplyr,
   purrr,
   readr,
-  lubridate
+  lubridate,
+  Hmisc
 LazyData: true
 RoxygenNote: 7.1.1

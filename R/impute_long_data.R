@@ -1,12 +1,13 @@
-#' Impute covariates for time-varying fitbit dataset
+#' Impute covariates for time-varying dataset
 #'
-#' @param fitbit_formatted the data.table output from format_fitbit_cox
-#' @param merged_covariates a data.table with a "person_id" column and any other covariates. Must have same person_ids as fitbit_formatted.
+#' @param dat_long a data.table representing a time-varying dataset
+#' @param merged_covariates a data.table with a "person_id" column and any other covariates. Must have same person_ids as dat_long.
 #'
 #' @return a mids object object
+#' @import Hmisc
 #' @export
 #'
-impute_fitbit_covariates <- function(fitbit_formatted,covariates)
+impute_long_data <- function(dat_long,covariates)
 {
   set.seed(0)
   vars <- colnames(covariates)
@@ -24,13 +25,13 @@ impute_fitbit_covariates <- function(fitbit_formatted,covariates)
 
   dat_list <- list()
   #original dataset
-  dat_list[[1]] <- merge(fitbit_formatted,covariates,by="person_id")
+  dat_list[[1]] <- merge(dat_long,covariates,by="person_id")
 
   dat_list[[1]]$.imp <- 0
   for (j in 2:(length(datc_list)+1))
   {
     #attach covariates
-    dat_list[[j]] <- merge(fitbit_formatted,datc_list[[j-1]],by="person_id")
+    dat_list[[j]] <- merge(dat_long,datc_list[[j-1]],by="person_id")
     dat_list[[j]]$.imp <- j-1
   }
 
