@@ -129,3 +129,64 @@ clean_fitbit <- function(fitbit_dat,wear_time,date_of_birth)
   fitbit_dat
 }
 
+#' Mode
+#'
+#' @export
+mode_stat <- function(x) {
+  unique_x <- unique(x)
+  tabulate_x <- tabulate(match(x, unique_x))
+  unique_x[tabulate_x == max(tabulate_x)]
+}
+
+#' Display table
+#'
+#' @export
+display_table <- function(table1)
+{
+  out <- Hmisc::html(table1, caption='',
+                     exclude1=F, npct='both', digits=3,long=T,
+                     prmsd=TRUE, brmsd=T, longtable=T, middle.bold=T,
+                     vnames = c('names'))
+  IRdisplay::display_html(out)
+}
+
+#' Display ANOVA
+#'
+#' @export
+display_anova <- function(aov,width=150)
+{
+  w <- paste0("width: ",width,"px")
+  a <- anova(aov)
+  rn <- rownames(a)
+  a <- as.data.frame(as.matrix(a))
+  a[,"P"] <- scales::pvalue(a[,"P"],accuracy = .0001)
+  a[,1] <- round(a[,1],4)
+  a <- as.data.frame(a)
+  IRdisplay::display_html(htmlTable::htmlTable(a, align = "c",
+                                               rnames = rn,
+                                               padding.tspanner = "", ctable = TRUE,
+                                               css.cell = w,
+  ))
+}
+
+#' Display summary
+#'
+#' @export
+display_summary <- function(s,width=150)
+{
+  w <- paste0("width: ",width,"px")
+  s <- summary(s)
+  rn <- rownames(s)
+  s <- as.data.frame(cbind(as.matrix(s),
+                           "p-value"=2*pnorm(q=abs(s[,"Effect"]/s[,"S.E."]),
+                                             lower.tail=FALSE)))
+  s[,"p-value"] <- scales::pvalue(s[,"p-value"],accuracy = .0001)
+  s[,1:8] <- apply(s[,1:8],2,round,2)
+  s <- as.data.frame(s)
+  s <- s[,c(1:7,9)]
+  IRdisplay::display_html(htmlTable::htmlTable(s, align = "c",
+                                               rnames = rn,
+                                               padding.tspanner = "", ctable = TRUE,
+                                               css.cell = w,
+  ))
+}
