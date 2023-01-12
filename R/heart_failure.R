@@ -43,6 +43,7 @@ heart_failure <- function(dataset,output_folder,anchor_date_table=NULL,before=NU
     ifelse(heart_failure_status == FALSE,NA,
            heart_failure_entry_date))]
   # Save data to bucket
+  hf_counts <- hf_counts[,c("person_id","heart_failure_entry_date","heart_failure_status")]
   fwrite(hf_counts,"heart_failure.csv")
   system(str_glue("gsutil cp heart_failure.csv {output_folder}/heart_failure.csv"),intern=TRUE)
 }

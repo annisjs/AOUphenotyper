@@ -17,8 +17,8 @@ dementia <- function(dataset,output_folder,anchor_date_table=NULL,before=NULL,af
     result_all <- result_all[condition_start_date >= min_window_date]
     result_all <- result_all[condition_start_date <= max_window_date]
   }
-  result_all <- setDT(result_all)[,.(dementia_status = length(condition_start_date) > 0,
-                                     dementia_entry_date = min(condition_start_date)),
+  result_all <- setDT(result_all)[,.(dementia_entry_date = min(condition_start_date),
+                                     dementia_status = length(condition_start_date) > 0),
                                   .(person_id)]
   fwrite(result_all,file="dementia.csv")
   system(str_glue("gsutil cp dementia.csv {output_folder}/dementia.csv"),intern=TRUE)

@@ -17,8 +17,8 @@ major_depressive_disorder <- function(dataset,output_folder,anchor_date_table=NU
     result_all <- result_all[condition_start_date >= min_window_date]
     result_all <- result_all[condition_start_date <= max_window_date]
   }
-  result_all <- setDT(result_all)[,.(major_depressive_disorder_status = length(condition_start_date) > 0,
-                                     major_depressive_disorder_entry_date = min(condition_start_date)),
+  result_all <- setDT(result_all)[,.(major_depressive_disorder_entry_date = min(condition_start_date),
+                                     major_depressive_disorder_status = length(condition_start_date) > 0),
                                   .(person_id)]
   fwrite(result_all,file="major_depressive_disorder.csv")
   system(str_glue("gsutil cp major_depressive_disorder.csv {output_folder}/major_depressive_disorder.csv"),intern=TRUE)

@@ -17,8 +17,8 @@ migraine <- function(dataset,output_folder,anchor_date_table=NULL,before=NULL,af
     result_all <- result_all[condition_start_date >= min_window_date]
     result_all <- result_all[condition_start_date <= max_window_date]
   }
-  result_all <- result_all[,.(migraine_status = length(condition_start_date) > 0,
-                              migraine_entry_date = min(condition_start_date)),
+  result_all <- result_all[,.(migraine_entry_date = min(condition_start_date),
+                              migraine_status = length(condition_start_date) > 0),
                            .(person_id)]
   data.table::fwrite(result_all,file="migraine.csv")
   system(str_glue("gsutil cp migraine.csv {output_folder}/migraine.csv"),intern=TRUE)
