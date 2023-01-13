@@ -17,8 +17,8 @@ gerd <- function(dataset,output_folder,anchor_date_table=NULL,before=NULL,after=
     result_all <- result_all[condition_start_date >= min_window_date]
     result_all <- result_all[condition_start_date <= max_window_date]
   }
-  result_all <- setDT(result_all)[,.(gerd_status = length(condition_start_date) > 0,
-                                     gerd_entry_date = min(condition_start_date)),
+  result_all <- setDT(result_all)[,.(gerd_entry_date = min(condition_start_date),
+                                     gerd_status = length(condition_start_date) > 0),
                                   .(person_id)]
   fwrite(result_all,file="gerd.csv")
   system(str_glue("gsutil cp gerd.csv {output_folder}/gerd.csv"),intern=TRUE)
