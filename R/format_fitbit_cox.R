@@ -186,7 +186,7 @@ format_fitbit_cox <- function(fitbit,dx,last_medical_encounter)
 #' @import data.table
 #' @export
 #'
-format_clust_cox <- function(clust_dat,dx,last_medical_encounter)
+format_clust_cox <- function(clust_dat,dx,last_medical_encounter,verbose=TRUE)
 {
   merged_cox <- merge(clust_dat,dx,by="person_id",all.x=TRUE)
   merged_cox[, had_before := as.numeric(dx_entry_date - min(date)) <= 180, .(person_id)]
@@ -194,9 +194,12 @@ format_clust_cox <- function(clust_dat,dx,last_medical_encounter)
   merged_cox <- merge(merged_cox,last_medical_encounter,all.x=TRUE)
   merged_cox[,dx_status := ifelse(is.na(dx_entry_date),FALSE,dx_entry_date)]
 
-  cat("\nInitial cohort:")
-  cat("\nN:",length(unique(merged_cox$person_id)))
-  cat("\nDays:",nrow(merged_cox))
+  if (verbose)
+  {
+    cat("\nInitial cohort:")
+    cat("\nN:",length(unique(merged_cox$person_id)))
+    cat("\nDays:",nrow(merged_cox))
+  }
 
   merged_cox[,time1 := lubridate::floor_date(date,"month")]
   merged_cox[,time2 := lubridate::ceiling_date(date,"month")-1]
@@ -211,11 +214,13 @@ format_clust_cox <- function(clust_dat,dx,last_medical_encounter)
   merged_cox_baseline <- merged_cox[baseline_marker == TRUE]
   merged_cox <- merged_cox[baseline_marker == FALSE]
 
-  cat("\n")
-  cat("\nExclude any that have no data beyond 180 days:")
-  cat("\nN:",length(unique(merged_cox$person_id)))
-  cat("\nDays:",nrow(merged_cox))
-
+  if (verbose)
+  {
+    cat("\n")
+    cat("\nExclude any that have no data beyond 180 days:")
+    cat("\nN:",length(unique(merged_cox$person_id)))
+    cat("\nDays:",nrow(merged_cox))
+  }
   #aggregate steps by month
   merged_cox_baseline_agg <- merged_cox_baseline[,.(baseline_c1 = length(which(daily_class == 1))/length(daily_class),
                                                     baseline_c2 = length(which(daily_class == 2))/length(daily_class),
@@ -226,24 +231,34 @@ format_clust_cox <- function(clust_dat,dx,last_medical_encounter)
                                                     count = length(date)),.(person_id)]
   merged_cox_baseline_agg <- merged_cox_baseline_agg[count >= 15]
 
-  cat("\n")
-  cat("\nExcluding months with < 15 days in the baseline period.")
+  if (verbose)
+  {
+    cat("\n")
+    cat("\nExcluding months with < 15 days in the baseline period.")
+  }
   merged_cox <- merge(merged_cox,merged_cox_baseline_agg,by="person_id")
-  cat("\nN:",length(unique(merged_cox$person_id)))
-  cat("\nDays:",nrow(merged_cox))
 
-  cat("\n")
-  cat("\nAnalysis switching to months…")
+  if (verbose)
+  {
+    cat("\nN:",length(unique(merged_cox$person_id)))
+    cat("\nDays:",nrow(merged_cox))
+
+    cat("\n")
+    cat("\nAnalysis switching to months…")
+  }
 
   init_months <- merged_cox[,.(count = length(date)),.(person_id,time1,time2)]
-  cat("\nN:",length(unique(merged_cox$person_id)))
-  cat("\nMonths: ", nrow(init_months))
+  if (verbose)
+  {
+    cat("\nN:",length(unique(merged_cox$person_id)))
+    cat("\nMonths: ", nrow(init_months))
 
-  cat("\n")
-  cat("\nRemoving months with less than 15 days of observations:")
-  cat("\nMonths removed: ",nrow(init_months[count < 15]))
-  cat("\nMonths remaining: ",nrow(init_months[count >= 15]))
-  cat("\nPercentage removed: ",round(nrow(init_months[count < 15]) / nrow(init_months),3) * 100, "%")
+    cat("\n")
+    cat("\nRemoving months with less than 15 days of observations:")
+    cat("\nMonths removed: ",nrow(init_months[count < 15]))
+    cat("\nMonths remaining: ",nrow(init_months[count >= 15]))
+    cat("\nPercentage removed: ",round(nrow(init_months[count < 15]) / nrow(init_months),3) * 100, "%")
+  }
 
   merged_cox[,count := length(date),.(person_id,time1,time2)]
   merged_cox <- merged_cox[count >= 15]
@@ -264,10 +279,13 @@ format_clust_cox <- function(clust_dat,dx,last_medical_encounter)
                                   count = length(date)),.(person_id,time1,time2)]
   merged_cox_agg <- merged_cox_agg[order(merged_cox_agg$time1,decreasing=FALSE)]
 
-  cat("\n")
-  cat("\nFinal cohort size:")
-  cat("\nN:",length(unique(merged_cox_agg$person_id)))
-  cat("\nMonths:",nrow(merged_cox_agg))
+  if (verbose)
+  {
+    cat("\n")
+    cat("\nFinal cohort size:")
+    cat("\nN:",length(unique(merged_cox_agg$person_id)))
+    cat("\nMonths:",nrow(merged_cox_agg))
+  }
 
   #Format data for cox model
 

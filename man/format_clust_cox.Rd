@@ -4,7 +4,7 @@
 \alias{format_clust_cox}
 \title{Format clustering data for time varying Cox model.}
 \usage{
-format_clust_cox(clust_dat, dx, last_medical_encounter)
+format_clust_cox(clust_dat, dx, last_medical_encounter, verbose = TRUE)
 }
 \arguments{
 \item{dx}{data.table with columns: person_id, dx_entry_date, dx_status}
