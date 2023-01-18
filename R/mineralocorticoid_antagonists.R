@@ -4,8 +4,6 @@
 #' @import data.table stringr
 mineralocorticoid_antagonists <- function(dataset,output_path,anchor_date_table=NULL,before=NULL,after=NULL)
 {
-  require(data.table)
-  require(stringr)
   meds <- c("spironolactone","aldactone","eplerenone","inspra")
   result <- med_query(dataset,meds)
   if (!is.null(anchor_date_table))
