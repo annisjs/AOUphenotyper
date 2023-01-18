@@ -4,8 +4,6 @@
 #' @import data.table stringr
 loop_diuretics <- function(dataset,output_folder,anchor_date_table=NULL,before=NULL,after=NULL)
 {
-  require(data.table)
-  require(stringr)
   meds <- c("bumetanide", "bumex", "ethacrynic acid", "ethacrynate", "edecrin", "sodium edicrin", "torsemide", "demadex", "furosemide", "lasix")
   result <- med_query(dataset,meds)
   if (!is.null(anchor_date_table))

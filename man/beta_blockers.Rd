@@ -13,7 +13,7 @@ beta_blockers(
 )
 }
 \value{
-CSV saved to output_folder/beta_blockers.csv
+output_folder/beta_blockers.csv
 }
 \description{
 Beta blockers

@@ -1,8 +1,6 @@
 #' Beta blockers
-#'
-#' @return CSV saved to output_folder/beta_blockers.csv
 #' @export
-#'
+#' @return output_folder/beta_blockers.csv
 #' @import data.table stringr
 beta_blockers <- function(dataset,output_folder,anchor_date_table=NULL,before=NULL,after=NULL)
 {
@@ -16,9 +14,8 @@ beta_blockers <- function(dataset,output_folder,anchor_date_table=NULL,before=NU
     result <- result[drug_exposure_start_date >= min_window_date]
     result <- result[drug_exposure_start_date <= max_window_date]
     result <- result[,c("person_id","drug_exposure_start_date")]
-  } else {
-    result <- setDT(result)[,.(beta_blockers_entry_date = min(drug_exposure_start_date)),.(person_id)]
   }
+  result <- setDT(result)[,.(beta_blockers_entry_date = min(drug_exposure_start_date)),.(person_id)]
   fwrite(result,file="beta_blockers.csv")
   system(str_glue("gsutil cp beta_blockers.csv {output_folder}/beta_blockers.csv"),intern=TRUE)
 }
