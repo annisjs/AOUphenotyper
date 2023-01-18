@@ -8,8 +8,13 @@
 #' @export
 read_bucket <- function(export_path) {
   col_types <- NULL
-  bucket <- Sys.getenv("WORKSPACE_BUCKET")
-  export_path <- stringr::str_glue("{bucket}/{export_path}")
+  #Check if the bucket is provided. If not, append.
+  bucket_provided <- grepl("^gs://",export_path)
+  if (!bucket_provided)
+  {
+    bucket <- Sys.getenv("WORKSPACE_BUCKET")
+    export_path <- stringr::str_glue("{bucket}/{export_path}")
+  }
   data.table::as.data.table(dplyr::bind_rows(
     purrr::map(system2('gsutil', args = c('ls', export_path), stdout = TRUE, stderr = TRUE),
                function(csv) {
@@ -189,4 +194,17 @@ display_summary <- function(s,width=150)
                                                padding.tspanner = "", ctable = TRUE,
                                                css.cell = w,
   ))
+}
+
+
+backup_packages <- function()
+{
+  package_path <- file.path(Sys.getenv("WORKSPACE_BUCKET"),"packages")
+  system(str_glue('gsutil -m cp -r /home/jupyter/packages/* {package_path} 2>&1'), intern = TRUE)
+}
+
+restore_packages <- function()
+{
+  package_path <- file.path(Sys.getenv("WORKSPACE_BUCKET"),"packages")
+  system(str_glue("gsutil -m cp -r {package_path}/* /home/jupyter/packages 2>&1"), intern = TRUE)
 }
