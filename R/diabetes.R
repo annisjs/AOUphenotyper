@@ -283,6 +283,7 @@ diabetes <- function(dataset,output_folder,anchor_date_table=NULL,before=NULL,af
     all_diabetes <- all_diabetes[diabetes_entry_date >= min_window_date]
     all_diabetes <- all_diabetes[diabetes_entry_date <= max_window_date]
   }
+  all_diabetes <- all_diabetes[,c("person_id","diabetes_entry_date","diabetes_status")]
   fwrite(all_diabetes,file="diabetes.csv")
   system(str_glue("gsutil cp diabetes.csv {output_folder}/diabetes.csv"),intern=TRUE)
 }
