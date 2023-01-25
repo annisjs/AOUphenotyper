@@ -70,7 +70,7 @@ closest_height <- function(dataset,output_folder,anchor_date_table=NULL,before=N
   result_all <- result_all[order(diff)]
   result_all <- result_all[,.(closest_height_entry_date = measurement_date[1],
                               closest_height_value = value_as_number[1],
-                              closest_height_unit = unit_concept_name[1]),.(person_id)]
+                              closest_height_unit = unit_concept_name[1]),.(person_id,anchor_date)]
   fwrite(result_all,file="closest_height.csv")
   system(str_glue("gsutil cp closest_height.csv {output_folder}/closest_height.csv"),intern=TRUE)
 }

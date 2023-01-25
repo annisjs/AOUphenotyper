@@ -16,7 +16,7 @@ closest_pro_bnp <- function(dataset,output_folder,anchor_date_table=NULL,before=
   result_all[,diff := abs(as.numeric(as.Date(measurement_date) - as.Date(anchor_date)))]
   result_all <- result_all[order(diff)]
   result_all <- result_all[,.(closest_pro_bnp_entry_date = measurement_date[1],
-                              closest_pro_bnp_value = value_as_number[1]),.(person_id)]
+                              closest_pro_bnp_value = value_as_number[1]),.(person_id,anchor_date)]
   fwrite(result_all,file="closest_pro_bnp.csv")
   system(str_glue("gsutil cp closest_pro_bnp.csv {output_folder}/closest_pro_bnp.csv"),intern=TRUE)
 }

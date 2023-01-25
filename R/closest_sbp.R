@@ -65,7 +65,7 @@ closest_sbp <-  function(dataset,output_folder,anchor_date_table=NULL,before=NUL
   result_all[,diff := abs(as.numeric(as.Date(measurement_date) - as.Date(anchor_date)))]
   result_all <- result_all[order(diff)]
   result_all <- result_all[,.(closest_sbp_entry_date = measurement_date[1],
-                              closest_sbp_value = value_as_number[1]),.(person_id)]
+                              closest_sbp_value = value_as_number[1]),.(person_id,anchor_date)]
   fwrite(result_all,file="closest_sbp.csv")
   system(str_glue("gsutil cp closest_sbp.csv {output_folder}/closest_sbp.csv"),intern=TRUE)
   system(str_glue("gsutil rm {output_folder}/aou_phenotyper/*"),intern=TRUE)
