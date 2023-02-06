@@ -196,13 +196,18 @@ display_summary <- function(s,width=150)
   ))
 }
 
-
+#' Backup packages
+#'
+#' @export
 backup_packages <- function()
 {
   package_path <- file.path(Sys.getenv("WORKSPACE_BUCKET"),"packages")
   system(str_glue('gsutil -m cp -r /home/jupyter/packages/* {package_path} 2>&1'), intern = TRUE)
 }
 
+#' Restore packages
+#'
+#' @export
 restore_packages <- function()
 {
   package_path <- file.path(Sys.getenv("WORKSPACE_BUCKET"),"packages")
