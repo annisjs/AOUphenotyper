@@ -4,8 +4,8 @@
 #' @import data.table stringr
 pad <- function(dataset,output_folder,anchor_date_table=NULL,before=NULL,after=NULL)
 {
-  icd9_codes <- c("I73.8","I73.9","I70.20","I70.21","I70.22")
-  icd10_codes <- c("443.9","443.8")
+  icd9_codes <-  c("443.9","443.8")
+  icd10_codes <- c("I73.8","I73.9","I70.20","I70.21","I70.22")
   result_icd9 <- icd9_query(dataset,icd9_codes)
   result_icd10 <- icd10_query(dataset,icd10_codes)
   result_all <- rbind(result_icd9,result_icd10)
