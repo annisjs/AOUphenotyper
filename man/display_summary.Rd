@@ -6,6 +6,11 @@
 \usage{
 display_summary(s, width = 150)
 }
+\arguments{
+\item{s}{a model returned by rms}
+
+\item{width}{the width of the table in pixels}
+}
 \description{
 Display summary
 }

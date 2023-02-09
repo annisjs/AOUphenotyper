@@ -1,3 +1,5 @@
+#' CPT query
+#' @export
 cpt_query <- function(dataset,cpt_codes)
 {
   cpt_terms <- paste('c.CONCEPT_CODE LIKE ',"'",cpt_codes,"'",collapse=' OR ',sep="")
@@ -14,34 +16,22 @@ cpt_query <- function(dataset,cpt_codes)
   download_data(query)
 }
 
+
+#' High BP query (>= 140/90)
+#' @export
 high_bp_query <- function(dataset)
 {
-  dia_concept_query <- str_glue("
-    SELECT c.concept_id
-    FROM {dataset}.concept c
-    WHERE lower(c.concept_name) LIKE '%diastolic blood pressure%'
-    ")
-  dia_codes <- download_data(dia_concept_query)$concept_id
-  dia_codes <- paste(dia_codes,sep="",collapse=",")
-  sys_concept_query <- str_glue("
-    SELECT c.concept_id
-    FROM {dataset}.concept c
-    WHERE lower(c.concept_name) LIKE '%systolic blood pressure%'
-    ")
-  sys_codes <- download_data(sys_concept_query)$concept_id
-  sys_codes <- paste(sys_codes,sep="",collapse=",")
-
   bp_query <- str_glue("
     WITH diatb AS (SELECT
         person_id, measurement_datetime, value_as_number AS dia
         FROM `{dataset}.measurement` m
     WHERE
-        m.measurement_concept_id IN ({dia_codes})),
+        m.measurement_concept_id IN ('8462-4','271650006','8453-3')),
     systb AS (SELECT
         person_id, measurement_datetime, value_as_number AS sys
         FROM `{dataset}.measurement` m
     WHERE
-        m.measurement_concept_id IN ({sys_codes}))
+        m.measurement_concept_id IN ('8480-6','271649006','8459-0'))
     SELECT d.person_id, MIN(CAST(d.measurement_datetime AS DATE)) AS measurement_date
     FROM
     diatb d
@@ -57,6 +47,9 @@ high_bp_query <- function(dataset)
   return(result)
 }
 
+
+#' ICD9 Query
+#' @export
 icd9_query <- function(dataset,icd9_codes)
 {
   icd9_terms <- paste('co.CONDITION_SOURCE_VALUE LIKE ',"'",icd9_codes,"'",collapse=' OR ',sep="")
@@ -74,6 +67,8 @@ icd9_query <- function(dataset,icd9_codes)
   download_data(query)
 }
 
+#' ICD10 Query
+#' @export
 icd10_query <- function(dataset,icd10_codes)
 {
   icd10_terms <- paste('co.CONDITION_SOURCE_VALUE LIKE ',"'",icd10_codes,"'",collapse=' OR ',sep="")
@@ -91,6 +86,8 @@ icd10_query <- function(dataset,icd10_codes)
   download_data(query)
 }
 
+#' Lab query using concept IDs
+#' @export
 lab_query_concept_id <- function(dataset,labs)
 {
   labs <- paste0("'",paste(labs,sep="",collapse="','"),"'")
@@ -103,6 +100,8 @@ lab_query_concept_id <- function(dataset,labs)
   download_data(query)
 }
 
+#' Lab query
+#' @export
 lab_query <- function(dataset,labs)
 {
   lab_terms <- paste('c.concept_name LIKE ',"'",labs,"'",collapse=' OR ',sep="")
@@ -116,6 +115,8 @@ lab_query <- function(dataset,labs)
   download_data(query)
 }
 
+#' Medication query
+#' @export
 med_query <- function(dataset,meds)
 {
   med_terms <- paste('lower(c.concept_name) LIKE ',"'%",meds,"%'",collapse=' OR ',sep="")
@@ -132,6 +133,8 @@ med_query <- function(dataset,meds)
   download_data(query)
 }
 
+#' Medication query returning first date
+#' @export
 med_query_min_date <- function(dataset,meds)
 {
   med_terms <- paste('lower(c.concept_name) LIKE ',"'%",meds,"%'",collapse=' OR ',sep="")
@@ -149,6 +152,8 @@ med_query_min_date <- function(dataset,meds)
   download_data(query)
 }
 
+#' Inpatient ICD query
+#' @export
 inpatient_icd_query <- function(dataset,codes)
 {
   code_clause <- paste('co.CONDITION_SOURCE_VALUE LIKE ',"'",codes,"'",collapse=' OR ',sep="")
@@ -174,6 +179,8 @@ inpatient_icd_query <- function(dataset,codes)
   download_data(query)
 }
 
+#' Outpatient ICD query
+#' @export
 outpatient_icd_query <- function(dataset,codes)
 {
   code_clause <- paste('co.CONDITION_SOURCE_VALUE LIKE ',"'",codes,"'",collapse=' OR ',sep="")

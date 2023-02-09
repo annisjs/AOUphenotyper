@@ -6,6 +6,9 @@
 \usage{
 mode_stat(x)
 }
+\arguments{
+\item{x}{a numeric vector}
+}
 \description{
 Mode
 }

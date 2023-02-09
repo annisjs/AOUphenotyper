@@ -4,7 +4,8 @@
 #' @import data.table stringr
 closest_bnp <- function(dataset,output_folder,anchor_date_table=NULL,before=NULL,after=NULL)
 {
-  result_all <- lab_query(dataset,"Natriuretic peptide B [Mass/volume] in Serum or Plasma")
+  result_all <- lab_query(dataset,c("Natriuretic peptide B [Mass/volume] in Serum or Plasma",
+                                    "Natriuretic peptide B [Mass/volume] in Blood"))
   if (!is.null(anchor_date_table))
   {
     result_all <- as.data.table(merge(result_all,anchor_date_table,by="person_id"))

@@ -135,7 +135,7 @@ clean_fitbit <- function(fitbit_dat,wear_time,date_of_birth)
 }
 
 #' Mode
-#'
+#' @param x a numeric vector
 #' @export
 mode_stat <- function(x) {
   unique_x <- unique(x)
@@ -144,7 +144,7 @@ mode_stat <- function(x) {
 }
 
 #' Display table
-#'
+#' @param table1 a table returned by summaryM etc in Hmisc
 #' @export
 display_table <- function(table1)
 {
@@ -156,7 +156,8 @@ display_table <- function(table1)
 }
 
 #' Display ANOVA
-#'
+#' @param s a model returned by rms
+#' @param width the width of the table in pixels
 #' @export
 display_anova <- function(aov,width=150)
 {
@@ -175,7 +176,8 @@ display_anova <- function(aov,width=150)
 }
 
 #' Display summary
-#'
+#' @param s a model returned by rms
+#' @param width the width of the table in pixels
 #' @export
 display_summary <- function(s,width=150)
 {

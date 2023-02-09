@@ -6,6 +6,11 @@
 \usage{
 display_anova(aov, width = 150)
 }
+\arguments{
+\item{width}{the width of the table in pixels}
+
+\item{s}{a model returned by rms}
+}
 \description{
 Display ANOVA
 }

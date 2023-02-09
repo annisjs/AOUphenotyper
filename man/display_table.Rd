@@ -6,6 +6,9 @@
 \usage{
 display_table(table1)
 }
+\arguments{
+\item{table1}{a table returned by summaryM etc in Hmisc}
+}
 \description{
 Display table
 }
