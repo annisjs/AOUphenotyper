@@ -12,6 +12,17 @@ demographics(
   after = NULL
 )
 }
+\arguments{
+\item{dataset}{a string returned by Sys.getenv("WORKSPACE_CDR"). Can also use another dataset, but this is not recommended.}
+
+\item{output_folder}{the folder to write the output to. Must be preceded by the workspace bucket location given by Sys.getenv("WORKSPACE_BUCKET").}
+
+\item{anchor_date_table}{a data.frame containing two columns: person_id, anchor_date. The dataset will be merged with demographics.}
+
+\item{before}{serves no function}
+
+\item{after}{serves no function}
+}
 \value{
 output_folder/demographics_*.csv
 }

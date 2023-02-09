@@ -1,7 +1,22 @@
 #' CAD
-#' @export
+#' @param dataset a string returned by Sys.getenv("WORKSPACE_CDR"). Can also use another dataset, but this is not recommended.
+#' @param output_folder the folder to write the output to. Must be preceded by the workspace bucket location given by Sys.getenv("WORKSPACE_BUCKET").
+#' @param anchor_date_table a data.frame containing two columns: person_id, anchor_date. A time window can be defined around the anchor date using the \code{before} and \code{after} arguments.
+#' @param before an integer greater than or equal to 0. Dates prior to anchor_date - before will be excluded.
+#' @param after an integer greater than or equal to 0. Dates after anchor_date + after will be excluded.
 #' @return output_folder/cad.csv
+#' @details At least 2 ICD codes and 1 CPT code.
+#'
+#' ICD9: "410","410.%","411","411.%","412","412.%","413","413.%","414","414.%","V45.82"
+#'
+#' ICD10: "I25.1%"
+#'
+#' CPT: "33534","33535","33536","33510","33511","
+#' 33512","33513","33514","33515","33516",
+#' "33517","33518","33519","33520","33521","33522",
+#' "33523","92980","92981","92982","92984","92995","92996"
 #' @import data.table stringr
+#' @export
 cad <- function(dataset,output_folder,anchor_date_table=NULL,before=NULL,after=NULL)
 {
   icd9_codes = c("410","410.%","411","411.%","412","412.%","413","413.%","414","414.%","V45.82")

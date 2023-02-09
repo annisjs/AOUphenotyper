@@ -1,7 +1,12 @@
 #' Demographics
-#' @export
+#' @param dataset a string returned by Sys.getenv("WORKSPACE_CDR"). Can also use another dataset, but this is not recommended.
+#' @param output_folder the folder to write the output to. Must be preceded by the workspace bucket location given by Sys.getenv("WORKSPACE_BUCKET").
+#' @param anchor_date_table a data.frame containing two columns: person_id, anchor_date. The dataset will be merged with demographics.
+#' @param before serves no function
+#' @param after serves no function
 #' @return output_folder/demographics_*.csv
 #' @import stringr data.table bigrquery
+#' @export
 demographics <- function(dataset,output_folder,anchor_date_table=NULL,before=NULL,after=NULL)
 {
   dem_query <- str_glue("
