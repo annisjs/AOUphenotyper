@@ -2,7 +2,7 @@
 #' @param dataset a string returned by Sys.getenv("WORKSPACE_CDR"). Can also use another dataset, but this is not recommended.
 #' @param output_folder the folder to write the output to. Must be preceded by the workspace bucket location given by Sys.getenv("WORKSPACE_BUCKET").
 #' @param anchor_date_table a data.frame containing two columns: person_id, anchor_date. A time window can be defined around the anchor date using the \code{before} and \code{after} arguments.
-#' @param before an integer greater than or equal to 0. Dates prior to anchor_date - before will be excluded.
+#' @param before an integer greater than or equal to 0. Dates prior to anchor_date + before will be excluded.
 #' @param after an integer greater than or equal to 0. Dates after anchor_date + after will be excluded.
 #' @return output_folder/dyslipidemia.csv
 #' @details Meets at least one condition:
@@ -26,7 +26,7 @@ dyslipidemia <- function(dataset,output_folder,anchor_date_table=NULL,before=NUL
   if (!is.null(anchor_date_table))
   {
     hdl <- as.data.table(merge(hdl,anchor_date_table,by="person_id"))
-    hdl[,min_window_date := anchor_date - before]
+    hdl[,min_window_date := anchor_date + before]
     hdl[,max_window_date := anchor_date + after]
     hdl <- hdl[hdl_date >= min_window_date]
     hdl <- hdl[hdl_date <= max_window_date]
@@ -40,7 +40,7 @@ dyslipidemia <- function(dataset,output_folder,anchor_date_table=NULL,before=NUL
   if (!is.null(anchor_date_table))
   {
     ldl <- as.data.table(merge(ldl,anchor_date_table,by="person_id"))
-    ldl[,min_window_date := anchor_date - before]
+    ldl[,min_window_date := anchor_date + before]
     ldl[,max_window_date := anchor_date + after]
     ldl <- ldl[ldl_date >= min_window_date]
     ldl <- ldl[ldl_date <= max_window_date]
@@ -52,7 +52,7 @@ dyslipidemia <- function(dataset,output_folder,anchor_date_table=NULL,before=NUL
   if (!is.null(anchor_date_table))
   {
     trigs <- as.data.table(merge(trigs,anchor_date_table,by="person_id"))
-    trigs[,min_window_date := anchor_date - before]
+    trigs[,min_window_date := anchor_date + before]
     trigs[,max_window_date := anchor_date + after]
     trigs <- trigs[trigs_date >= min_window_date]
     trigs <- trigs[trigs_date <= max_window_date]
@@ -63,7 +63,7 @@ dyslipidemia <- function(dataset,output_folder,anchor_date_table=NULL,before=NUL
   if (!is.null(anchor_date_table))
   {
     chol <- as.data.table(merge(chol,anchor_date_table,by="person_id"))
-    chol[,min_window_date := anchor_date - before]
+    chol[,min_window_date := anchor_date + before]
     chol[,max_window_date := anchor_date + after]
     chol <- chol[chol_date >= min_window_date]
     chol <- chol[chol_date <= max_window_date]
