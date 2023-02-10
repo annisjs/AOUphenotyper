@@ -25,7 +25,7 @@ heart_failure <- function(dataset,output_folder,anchor_date_table=NULL,before=NU
     hf_inpt[,max_window_date := anchor_date + after]
     hf_inpt <- hf_inpt[condition_start_date >= min_window_date]
 
-    hf_outpt <- as.data.table(merge(hf_inpt,anchor_date_table,by="person_id"))
+    hf_outpt <- as.data.table(merge(hf_outpt,anchor_date_table,by="person_id"))
     hf_outpt[,min_window_date := anchor_date - before]
     hf_outpt[,max_window_date := anchor_date + after]
     hf_outpt <- hf_outpt[condition_start_date >= min_window_date]
