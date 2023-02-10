@@ -19,9 +19,6 @@ demographics <- function(dataset,output_folder,anchor_date_table=NULL,before=NUL
     FROM
         `person` person
     LEFT JOIN
-        `concept` p_gender_concept
-            ON person.gender_concept_id = p_gender_concept.concept_id
-    LEFT JOIN
         `concept` p_race_concept
             ON person.race_concept_id = p_race_concept.concept_id
     LEFT JOIN
