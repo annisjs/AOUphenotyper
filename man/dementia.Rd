@@ -12,9 +12,28 @@ dementia(
   after = NULL
 )
 }
+\arguments{
+\item{dataset}{a string returned by Sys.getenv("WORKSPACE_CDR"). Can also use another dataset, but this is not recommended.}
+
+\item{output_folder}{the folder to write the output to. Must be preceded by the workspace bucket location given by Sys.getenv("WORKSPACE_BUCKET").}
+
+\item{anchor_date_table}{a data.frame containing two columns: person_id, anchor_date. A time window can be defined around the anchor date using the \code{before} and \code{after} arguments.}
+
+\item{before}{an integer greater than or equal to 0. Dates prior to anchor_date + before will be excluded.}
+
+\item{after}{an integer greater than or equal to 0. Dates after anchor_date + after will be excluded.}
+}
 \value{
 output_folder/dementia.csv
 }
 \description{
 Dementia
+}
+\details{
+At least 1 ICD code:
+
+ICD9: "331.0","331.82","290.4","290.40","290.41","290.42","290.43"
+
+ICD10: "G30","F00","G30.0","G30.1","G30.8","G30.9","F00.0","F00.1",
+"F00.2","F00.9","G31.8","F02.8","F01","F01.0","F01.1","F01.2","F01.3","F01.8","F01.9"
 }

@@ -1,7 +1,17 @@
 #' Heart failure
-#' @export
+#' @param dataset a string returned by Sys.getenv("WORKSPACE_CDR"). Can also use another dataset, but this is not recommended.
+#' @param output_folder the folder to write the output to. Must be preceded by the workspace bucket location given by Sys.getenv("WORKSPACE_BUCKET").
+#' @param anchor_date_table a data.frame containing two columns: person_id, anchor_date. A time window can be defined around the anchor date using the \code{before} and \code{after} arguments.
+#' @param before an integer greater than or equal to 0. Dates prior to anchor_date + before will be excluded.
+#' @param after an integer greater than or equal to 0. Dates after anchor_date + after will be excluded.
 #' @return output_folder/heart_failure.csv
+#' @details At least 1 inpatient or 2 outpatient ICD codes:
+#'
+#' ICD9: "425","425.%","428","428.%",
+#'
+#' ICD10: "I42","I42.%","I50","I50.%"
 #' @import data.table stringr
+#' @export
 heart_failure <- function(dataset,output_folder,anchor_date_table=NULL,before=NULL,after=NULL)
 {
   # Pull inpatient and outpatient codes
@@ -11,12 +21,12 @@ heart_failure <- function(dataset,output_folder,anchor_date_table=NULL,before=NU
   if (!is.null(anchor_date_table))
   {
     hf_inpt <- as.data.table(merge(hf_inpt,anchor_date_table,by="person_id"))
-    hf_inpt[,min_window_date := anchor_date - before]
+    hf_inpt[,min_window_date := anchor_date + before]
     hf_inpt[,max_window_date := anchor_date + after]
     hf_inpt <- hf_inpt[condition_start_date >= min_window_date]
 
-    hf_outpt <- as.data.table(merge(hf_inpt,anchor_date_table,by="person_id"))
-    hf_outpt[,min_window_date := anchor_date - before]
+    hf_outpt <- as.data.table(merge(hf_outpt,anchor_date_table,by="person_id"))
+    hf_outpt[,min_window_date := anchor_date + before]
     hf_outpt[,max_window_date := anchor_date + after]
     hf_outpt <- hf_outpt[condition_start_date >= min_window_date]
   }

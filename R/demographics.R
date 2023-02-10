@@ -1,7 +1,12 @@
 #' Demographics
-#' @export
+#' @param dataset a string returned by Sys.getenv("WORKSPACE_CDR"). Can also use another dataset, but this is not recommended.
+#' @param output_folder the folder to write the output to. Must be preceded by the workspace bucket location given by Sys.getenv("WORKSPACE_BUCKET").
+#' @param anchor_date_table a data.frame containing two columns: person_id, anchor_date. The dataset will be merged with demographics.
+#' @param before serves no function
+#' @param after serves no function
 #' @return output_folder/demographics_*.csv
 #' @import stringr data.table bigrquery
+#' @export
 demographics <- function(dataset,output_folder,anchor_date_table=NULL,before=NULL,after=NULL)
 {
   dem_query <- str_glue("
@@ -13,9 +18,6 @@ demographics <- function(dataset,output_folder,anchor_date_table=NULL,before=NUL
         p_sex_at_birth_concept.concept_name as sex
     FROM
         `person` person
-    LEFT JOIN
-        `concept` p_gender_concept
-            ON person.gender_concept_id = p_gender_concept.concept_id
     LEFT JOIN
         `concept` p_race_concept
             ON person.race_concept_id = p_race_concept.concept_id

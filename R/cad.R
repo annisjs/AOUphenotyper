@@ -1,7 +1,22 @@
 #' CAD
-#' @export
+#' @param dataset a string returned by Sys.getenv("WORKSPACE_CDR"). Can also use another dataset, but this is not recommended.
+#' @param output_folder the folder to write the output to. Must be preceded by the workspace bucket location given by Sys.getenv("WORKSPACE_BUCKET").
+#' @param anchor_date_table a data.frame containing two columns: person_id, anchor_date. A time window can be defined around the anchor date using the \code{before} and \code{after} arguments.
+#' @param before an integer greater than or equal to 0. Dates prior to anchor_date + before will be excluded.
+#' @param after an integer greater than or equal to 0. Dates after anchor_date + after will be excluded.
 #' @return output_folder/cad.csv
+#' @details At least 2 ICD codes and 1 CPT code.
+#'
+#' ICD9: "410","410.%","411","411.%","412","412.%","413","413.%","414","414.%","V45.82"
+#'
+#' ICD10: "I25.1%"
+#'
+#' CPT: "33534","33535","33536","33510","33511","
+#' 33512","33513","33514","33515","33516",
+#' "33517","33518","33519","33520","33521","33522",
+#' "33523","92980","92981","92982","92984","92995","92996"
 #' @import data.table stringr
+#' @export
 cad <- function(dataset,output_folder,anchor_date_table=NULL,before=NULL,after=NULL)
 {
   icd9_codes = c("410","410.%","411","411.%","412","412.%","413","413.%","414","414.%","V45.82")
@@ -15,13 +30,13 @@ cad <- function(dataset,output_folder,anchor_date_table=NULL,before=NULL,after=N
   if (!is.null(anchor_date_table))
   {
     result_icd <- as.data.table(merge(result_icd,anchor_date_table,by="person_id"))
-    result_icd[,min_window_date := anchor_date - before]
+    result_icd[,min_window_date := anchor_date + before]
     result_icd[,max_window_date := anchor_date + after]
     result_icd <- result_icd[condition_start_date >= min_window_date]
     result_icd <- result_icd[condition_start_date <= max_window_date]
 
     result_cpt <- as.data.table(merge(result_cpt,anchor_date_table,by="person_id"))
-    result_cpt[,min_window_date := anchor_date - before]
+    result_cpt[,min_window_date := anchor_date + before]
     result_cpt[,max_window_date := anchor_date + after]
     result_cpt <- result_cpt[entry_date >= min_window_date]
     result_cpt <- result_cpt[entry_date <= max_window_date]
