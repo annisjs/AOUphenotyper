@@ -65,9 +65,9 @@ closest_height <- function(dataset,output_folder,anchor_date_table=NULL,before=N
 
   bq_table_save(
     bq_dataset_query(dataset, query, billing = Sys.getenv("GOOGLE_PROJECT")),
-    paste0(output_folder,"/height_*.csv"),
+    paste0(output_folder,"/aou_phenotyper/height_*.csv"),
     destination_format = "CSV")
-  result_all <- as.data.table(read_bucket(str_glue("{output_folder}/height_*.csv")))
+  result_all <- as.data.table(read_bucket(str_glue("{output_folder}/aou_phenotyper/height_*.csv")))
   result_all <- as.data.table(merge(result_all,anchor_date_table,by="person_id"))
   result_all[,min_window_date := anchor_date + before]
   result_all[,max_window_date := anchor_date + after]
@@ -80,4 +80,5 @@ closest_height <- function(dataset,output_folder,anchor_date_table=NULL,before=N
                               closest_height_unit = unit_concept_name[1]),.(person_id,anchor_date)]
   fwrite(result_all,file="closest_height.csv")
   system(str_glue("gsutil cp closest_height.csv {output_folder}/closest_height.csv"),intern=TRUE)
+  system(str_glue("gsutil rm {output_folder}/aou_phenotyper/*"),intern=TRUE)
 }
