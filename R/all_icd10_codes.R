@@ -11,8 +11,8 @@ all_icd10_codes <- function(dataset,output_folder,anchor_date_table=NULL,before=
 {
   query <- str_glue("
        SELECT DISTINCT co.person_id,
-        co.condition_start_date as all_icd10_codes_entry_date,
-        co.condition_source_value all_icd10_codes_value
+        MIN(co.condition_start_date) as all_icd10_codes_entry_date,
+        co.condition_source_value as all_icd10_codes_value
     FROM
         {dataset}.condition_occurrence co
         INNER JOIN
@@ -20,6 +20,7 @@ all_icd10_codes <- function(dataset,output_folder,anchor_date_table=NULL,before=
         ON (co.condition_source_concept_id = c.concept_id)
     WHERE
         c.VOCABULARY_ID LIKE 'ICD10CM'
+        GROUP BY person_id, all_icd10_codes_value
   ")
 
   bq_table_save(
