@@ -67,7 +67,7 @@ obesity_bmi <- function(dataset,output_folder,anchor_date_table=NULL,before=NULL
   result_all <- result_all[order(bmi_date)]
   result_all <- result_all[bmi >= 30]
   result_all <- result_all[,.(obesity_bmi_entry_date = bmi_date[1],
-                              obeisty_bmi_value = bmi[1]),
+                              obesity_bmi_value = bmi[1]),
                            .(person_id)]
   fwrite(result_all,file="obesity_bmi.csv")
   system(str_glue("gsutil cp obesity_bmi.csv {output_folder}/obesity_bmi.csv"),intern=TRUE)
