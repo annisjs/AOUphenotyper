@@ -3,6 +3,8 @@
 export(acei_arb_meds)
 export(alcohol)
 export(all_hospitalizations)
+export(all_icd10_codes)
+export(all_icd9_codes)
 export(asthma)
 export(backup_packages)
 export(beta_blockers)
