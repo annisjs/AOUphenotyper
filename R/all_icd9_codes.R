@@ -12,7 +12,7 @@ all_icd9_codes <- function(dataset,output_folder,anchor_date_table=NULL,before=N
   query <- str_glue("
        SELECT DISTINCT co.person_id,
         co.condition_start_date as all_icd9_codes_entry_date,
-        co.condition_source_value all_icd9_code_value
+        co.condition_source_value all_icd9_codes_value
     FROM
         {dataset}.condition_occurrence co
         INNER JOIN
