@@ -26,8 +26,8 @@ hyperlipidemia <- function(dataset,output_folder,anchor_date_table=NULL,before=N
     result_all <- result_all[condition_start_date >= min_window_date]
     result_all <- result_all[condition_start_date <= max_window_date]
   }
-  result_all <- setDT(result_all)[,.(hyperlipidemia_status = length(condition_start_date) > 0,
-                                     hyperlipidemia_entry_date = min(condition_start_date)),
+  result_all <- setDT(result_all)[,.(hyperlipidemia_entry_date = min(condition_start_date),
+                                     hyperlipidemia_status = length(condition_start_date) > 0),
                                   .(person_id)]
   data.table::fwrite(result_all,file="hyperlipidemia.csv")
   system(str_glue("gsutil cp hyperlipidemia.csv {output_folder}/hyperlipidemia.csv"),intern=TRUE)
