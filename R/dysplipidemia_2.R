@@ -23,7 +23,7 @@
 #' Statin use unless DM
 #' @import data.table stringr
 #' @export
-dyslipidemia <- function(dataset,output_folder,anchor_date_table=NULL,before=NULL,after=NULL)
+dyslipidemia_2 <- function(dataset,output_folder,anchor_date_table=NULL,before=NULL,after=NULL)
 {
 
   hdl <- lab_query(dataset,"Cholesterol in HDL [Mass/volume] in Serum or Plasma")
