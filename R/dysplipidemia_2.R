@@ -160,7 +160,7 @@ dyslipidemia_2 <- function(dataset,output_folder,anchor_date_table=NULL,before=N
   result_all <- result_all[,.(dyslipidemia_status = dyslipidemia_status[1],
                               dyslipidemia_entry_date = dyslipidemia_entry_date[1]),
                            .(person_id)]
-  data.table::fwrite(result_all,file="dyslipidemia.csv")
-  system(str_glue("gsutil cp dyslipidemia.csv {output_folder}/dyslipidemia.csv"),intern=TRUE)
+  data.table::fwrite(result_all,file="dyslipidemia_2.csv")
+  system(str_glue("gsutil cp dyslipidemia_2.csv {output_folder}/dyslipidemia_2.csv"),intern=TRUE)
 }
 
