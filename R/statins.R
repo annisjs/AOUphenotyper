@@ -25,6 +25,11 @@ statins <- function(dataset,output_folder,anchor_date_table=NULL,before=NULL,aft
     result <- result[,c("person_id","drug_exposure_start_date")]
   }
   result <- setDT(result)[,.(statins_entry_date = min(drug_exposure_start_date)),.(person_id)]
-  fwrite(result,file="statins.csv")
-  system(str_glue("gsutil cp statins.csv {output_folder}/statins.csv"),intern=TRUE)
+  if (missing(output_folder))
+  {
+    return(result)
+  } else {
+    fwrite(result,file="statins.csv")
+    system(str_glue("gsutil cp statins.csv {output_folder}/statins.csv"),intern=TRUE)
+  }
 }

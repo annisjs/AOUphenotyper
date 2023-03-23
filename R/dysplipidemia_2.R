@@ -84,9 +84,7 @@ dyslipidemia_2 <- function(dataset,output_folder,anchor_date_table=NULL,before=N
       {dataset}.`concept` p_sex_at_birth_concept
           ON person.sex_at_birth_concept_id = p_sex_at_birth_concept.concept_id", sep="")
 
-  diabetes(dataset,paste0(output_folder,"/dm_temp"))
-  dm <- read_bucket(str_glue("{output_folder}/temp/diabetes.csv"))
-  rm_bucket(str_glue("{output_folder}/temp/diabetes.csv"))
+  dm <- diabetes(dataset)
   if (!is.null(anchor_date_table))
   {
     dm <- as.data.table(merge(dm,anchor_date_table,by="person_id"))
@@ -96,9 +94,7 @@ dyslipidemia_2 <- function(dataset,output_folder,anchor_date_table=NULL,before=N
     dm <- dm[diabetes_entry_date <= max_window_date]
   }
 
-  statins(dataset,paste0(output_folder,"/dm_temp"))
-  statins <- read_bucket(str_glue("{output_folder}/temp/statins.csv"))
-  rm_bucket(str_glue("{output_folder}/temp/statins.csv"))
+  statins <- statins(dataset)
   if (!is.null(anchor_date_table))
   {
     statins <- as.data.table(merge(statins,anchor_date_table,by="person_id"))
@@ -141,8 +137,8 @@ dyslipidemia_2 <- function(dataset,output_folder,anchor_date_table=NULL,before=N
                       chol_date = chol_date[1]),.(person_id)]
 
   #Statins
-  statins[,statin_status := !is.na(statin_entry_date)]
-  statins <- statins[statins_status == TRUE]
+  statins[,statin_status := !is.na(statins_entry_date)]
+  statins <- statins[statin_status == TRUE]
 
   #Merge
   result_all <- merge(hdl_agg,ldl_agg,by="person_id",all.x=T,all.y=T)
@@ -157,9 +153,10 @@ dyslipidemia_2 <- function(dataset,output_folder,anchor_date_table=NULL,before=N
   result_all[,dyslipidemia_status := ifelse(is.na(dyslipidemia_status),FALSE,dyslipidemia_status)]
   result_all[,dyslipidemia_entry_date := pmin(hdl_date,ldl_date,trigs_date,chol_date,na.rm=T)]
   result_all <- result_all[order(dyslipidemia_entry_date,decreasing=T)]
-  result_all <- result_all[,.(dyslipidemia_status = dyslipidemia_status[1],
-                              dyslipidemia_entry_date = dyslipidemia_entry_date[1]),
+  result_all <- result_all[,.(dyslipidemia_2_status = dyslipidemia_status[1],
+                              dyslipidemia_2_entry_date = dyslipidemia_entry_date[1]),
                            .(person_id)]
+  result_all <- result_all[dyslipidemia_2_status == TRUE]
   data.table::fwrite(result_all,file="dyslipidemia_2.csv")
   system(str_glue("gsutil cp dyslipidemia_2.csv {output_folder}/dyslipidemia_2.csv"),intern=TRUE)
 }
