@@ -198,6 +198,21 @@ display_summary <- function(s,width=150)
   ))
 }
 
+#' Display a dataframe
+#' @param df a dataframe
+#' @param width the width of the table in pixels
+#' @param digits the number of digits to round to
+#' @export
+display_df <- function (df, width = 150,digits=3)
+{
+  w <- paste0("width: ", width, "px")
+  rn <- rownames(df)
+  a <- as.data.frame(Hmisc::format.df(df,dec=digits))
+  IRdisplay::display_html(htmlTable::htmlTable(a, align = "c",
+                                               rnames = rn, padding.tspanner = "", ctable = TRUE, css.cell = w,
+  ))
+}
+
 #' Backup packages
 #'
 #' @export

@@ -61,7 +61,7 @@ closest_bmi <-  function(dataset,output_folder,anchor_date_table=NULL,before=NUL
                 ) measurement")
 
   result_all <- download_data(query)
-  result_all <- as.data.table(merge(result_all,anchor_date_table,by="person_id"))
+  result_all <- as.data.table(merge(result_all,anchor_date_table,by="person_id",allow.cartesian=TRUE))
   result_all[,min_window_date := anchor_date + before]
   result_all[,max_window_date := anchor_date + after]
   result_all <- result_all[measurement_date >= min_window_date]

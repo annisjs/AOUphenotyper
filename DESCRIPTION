@@ -17,4 +17,4 @@ Imports:
   Hmisc,
   mice
 LazyData: true
-RoxygenNote: 7.1.1
+RoxygenNote: 7.2.3
