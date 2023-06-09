@@ -27,8 +27,8 @@ ptsd <- function(dataset,output_folder,anchor_date_table=NULL,before=NULL,after=
     result_all <- result_all[condition_start_date >= min_window_date]
     result_all <- result_all[condition_start_date <= max_window_date]
   }
-  result_all <- setDT(result_all)[,.(dementia_entry_date = min(condition_start_date),
-                                     dementia_status = length(condition_start_date) > 0),
+  result_all <- setDT(result_all)[,.(ptsd_entry_date = min(condition_start_date),
+                                     ptsd_status = length(condition_start_date) > 0),
                                   .(person_id)]
   fwrite(result_all,file="ptsd.csv")
   system(str_glue("gsutil cp ptsd.csv {output_folder}/ptsd.csv"),intern=TRUE)
