@@ -8,7 +8,7 @@
 #' @import data.table
 #' @export
 #'
-format_sleep_cox <- function(sleep,dx,last_medical_encounter)
+format_sleep_cox2 <- function(sleep,dx,last_medical_encounter)
 {
   sleep[,date := sleep_date]
   sleep[,hour_asleep := minute_asleep / 60]
@@ -70,6 +70,12 @@ format_sleep_cox <- function(sleep,dx,last_medical_encounter)
   merged_cox[,count := length(hour_asleep),.(person_id,time1,time2)]
   merged_cox <- merged_cox[count >= 15]
 
+  merged_cox[,count := length(minute_rem),.(person_id,time1,time2)]
+  merged_cox <- merged_cox[count >= 15]
+
+  merged_cox[,count := length(minute_deep),.(person_id,time1,time2)]
+  merged_cox <- merged_cox[count >= 15]
+
   #aggregate steps by month
   merged_cox_agg <- merged_cox[,.(mean_hour_asleep = mean(hour_asleep,na.rm=T),
                                   mean_minute10_rem = mean(minute10_rem,na.rm=T),
@@ -79,6 +85,8 @@ format_sleep_cox <- function(sleep,dx,last_medical_encounter)
                                   baseline_hour_asleep = baseline_hour_asleep[1],
                                   count = length(hour_asleep)),.(person_id,time1,time2)]
   merged_cox_agg <- merged_cox_agg[order(merged_cox_agg$time1,decreasing=FALSE)]
+  merged_cox_agg <- merged_cox_agg[!is.na(mean_minute10_rem)]
+  merged_cox_agg <- merged_cox_agg[!is.na(mean_minute10_deep)]
 
   cat("\n")
   cat("\nFinal cohort size:")
@@ -154,4 +162,3 @@ format_sleep_cox <- function(sleep,dx,last_medical_encounter)
 
   return(merged_cox_agg)
 }
-
