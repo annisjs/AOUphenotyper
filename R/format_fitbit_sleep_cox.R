@@ -8,7 +8,7 @@
 #' @import data.table
 #' @export
 #'
-format_sleep_cox2 <- function(sleep,dx,last_medical_encounter)
+format_sleep_cox <- function(sleep,dx,last_medical_encounter)
 {
   sleep[,date := sleep_date]
   sleep[,hour_asleep := minute_asleep / 60]
