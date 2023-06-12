@@ -11,8 +11,9 @@
 first_light_sleep <- function(dataset,output_folder,anchor_date_table=NULL,before=NULL,after=NULL)
 {
   query <- paste("
-        SELECT min(start_datetime) AS first_light_sleep_datetime,
-            CAST(start_datetime AS DATE) as first_light_sleep_date
+        SELECT person_id,
+               min(start_datetime) AS first_light_sleep_datetime,
+              CAST(start_datetime AS DATE) as first_light_sleep_date
         FROM sleep_level
         WHERE level = 'light'
         GROUP BY person_id, first_light_sleep_date", sep="")

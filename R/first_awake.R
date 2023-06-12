@@ -11,7 +11,9 @@
 first_awake <- function(dataset,output_folder,anchor_date_table=NULL,before=NULL,after=NULL)
 {
   query <- paste("
-        SELECT min(start_datetime) AS first_awake_datetime,
+        SELECT
+            person_id,
+            min(start_datetime) AS first_awake_datetime,
             CAST(start_datetime AS DATE) as first_awake_date
         FROM sleep_level
         WHERE level = 'awake'
