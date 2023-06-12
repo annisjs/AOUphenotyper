@@ -13,10 +13,10 @@ first_light_sleep <- function(dataset,output_folder,anchor_date_table=NULL,befor
   query <- paste("
         SELECT person_id,
                min(start_datetime) AS first_light_sleep_datetime,
-              CAST(start_datetime AS DATE) as first_light_sleep_date
+               sleep_date as first_light_sleep_date
         FROM sleep_level
         WHERE level = 'light'
-        GROUP BY person_id, first_light_sleep_date", sep="")
+        GROUP BY person_id, sleep_date", sep="")
   bq_table_save(
     bq_dataset_query(dataset, query, billing = Sys.getenv("GOOGLE_PROJECT")),
     paste0(output_folder,"/aou_phenotyper/first_light_sleep_*.csv"),
