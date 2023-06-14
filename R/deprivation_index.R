@@ -42,7 +42,11 @@ deprivation_index <- function(dataset,output_folder,anchor_date_table=NULL,befor
                 AND observation_source_concept_id = 1585250
                 AND observation.value_as_string NOT LIKE 'Res%'", sep="")
 
-  result <- download_data(query)
+  bq_table_save(
+    bq_dataset_query(dataset, query, billing = Sys.getenv("GOOGLE_PROJECT")),
+    paste0(output_folder,"/aou_phenotyper/deprivation_index_*.csv"),
+    destination_format = "CSV")
+  result <- read_bucket(paste0(output_folder,"/aou_phenotyper/deprivation_index_*.csv"))
   if (!is.null(anchor_date_table))
   {
     result <- as.data.table(merge(result,anchor_date_table,by="person_id"))
@@ -50,9 +54,10 @@ deprivation_index <- function(dataset,output_folder,anchor_date_table=NULL,befor
     result[,max_window_date := anchor_date + after]
     result <- result[deprivation_index_entry_date >= min_window_date]
     result <- result[deprivation_index_entry_date <= max_window_date]
+    result <- result[,c("person_id","deprivatio_index_entry_date","deprivation_index_value")]
   }
-  result <- result[,c("person_id","deprivation_index_entry_date","deprivation_index_value")]
   fwrite(result,file="deprivation_index.csv")
-  system(str_glue("gsutil cp deprivation_index.csv {output_folder}/deprivation_index.csv"),intern=TRUE)
+  system(str_glue("gsutil cp fitbit.csv {output_folder}/deprivation_index.csv"),intern=TRUE)
+  system(str_glue("gsutil rm {output_folder}/aou_phenotyper/*"),intern=TRUE)
 }
 
