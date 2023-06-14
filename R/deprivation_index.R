@@ -53,6 +53,6 @@ deprivation_index <- function(dataset,output_folder,anchor_date_table=NULL,befor
   }
   result <- result[,c("person_id","deprivation_index_entry_date","deprivation_index_value")]
   fwrite(result,file="deprivation_index.csv")
-  system(str_glue("gsutil cp employment.csv {output_folder}/deprivation_index.csv"),intern=TRUE)
+  system(str_glue("gsutil cp deprivation_index.csv {output_folder}/deprivation_index.csv"),intern=TRUE)
 }
 
