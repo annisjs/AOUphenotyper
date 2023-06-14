@@ -57,7 +57,7 @@ deprivation_index <- function(dataset,output_folder,anchor_date_table=NULL,befor
     result <- result[,c("person_id","deprivatio_index_entry_date","deprivation_index_value")]
   }
   fwrite(result,file="deprivation_index.csv")
-  system(str_glue("gsutil cp fitbit.csv {output_folder}/deprivation_index.csv"),intern=TRUE)
+  system(str_glue("gsutil cp deprivation_index.csv {output_folder}/deprivation_index.csv"),intern=TRUE)
   system(str_glue("gsutil rm {output_folder}/aou_phenotyper/*"),intern=TRUE)
 }
 
