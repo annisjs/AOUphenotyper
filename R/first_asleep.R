@@ -16,7 +16,7 @@ first_asleep <- function(dataset,output_folder,anchor_date_table=NULL,before=NUL
                start_datetime AS first_asleep_datetime,
                duration_in_min AS first_asleep_duration
         FROM (SELECT person_id, sleep_date, start_datetime, duration_in_min,
-               row_number() over(partition by person_id order by start_datetime desc) as rn
+               row_number() over(partition by person_id, sleep_date order by start_datetime desc) as rn
                 FROM sleep_level
                 WHERE level = 'asleep') as t1
         WHERE rn = 1",sep="")
