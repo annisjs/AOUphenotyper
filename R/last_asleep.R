@@ -12,12 +12,14 @@ last_asleep <- function(dataset,output_folder,anchor_date_table=NULL,before=NULL
 {
   query <- paste("
         SELECT person_id,
-               max(start_datetime) AS last_asleep_datetime,
-               sleep_date as last_asleep_date,
+               sleep_date AS last_asleep_date,
+               start_datetime AS last_asleep_datetime,
                duration_in_min AS last_asleep_duration
-        FROM sleep_level
-        WHERE level = 'asleep'
-        GROUP BY person_id, sleep_date", sep="")
+        FROM (SELECT person_id, sleep_date, start_datetime, duration_in_min,
+               row_number() over(partition by person_id order by start_datetime asc) as rn
+                FROM {dataset}.sleep_level
+                WHERE level = 'asleep') as t1
+        WHERE rn = 1",sep="")
   bq_table_save(
     bq_dataset_query(dataset, query, billing = Sys.getenv("GOOGLE_PROJECT")),
     paste0(output_folder,"/aou_phenotyper/last_asleep_*.csv"),
