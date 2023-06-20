@@ -17,7 +17,7 @@ last_asleep <- function(dataset,output_folder,anchor_date_table=NULL,before=NULL
                duration_in_min AS last_asleep_duration
         FROM (SELECT person_id, sleep_date, start_datetime, duration_in_min,
                row_number() over(partition by person_id order by start_datetime asc) as rn
-                FROM {dataset}.sleep_level
+                FROM sleep_level
                 WHERE level = 'asleep') as t1
         WHERE rn = 1",sep="")
   bq_table_save(
