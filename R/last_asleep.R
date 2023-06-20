@@ -13,7 +13,7 @@ last_asleep <- function(dataset,output_folder,anchor_date_table=NULL,before=NULL
   query <- paste("
         SELECT person_id,
                max(start_datetime) AS last_asleep_datetime,
-               sleep_date as last_asleep_date
+               sleep_date as last_asleep_date,
                duration_in_min AS last_asleep_duration
         FROM sleep_level
         WHERE level = 'asleep'
