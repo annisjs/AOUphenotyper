@@ -12,7 +12,7 @@
 #' ICD10: "F41.9","F41.0","F41.1"
 #' @import data.table stringr
 #' @export
-gerd <- function(dataset,output_folder,anchor_date_table=NULL,before=NULL,after=NULL)
+anxiety <- function(dataset,output_folder,anchor_date_table=NULL,before=NULL,after=NULL)
 {
   icd9_codes <- c("300.00","300.01","300.02")
   icd10_codes <- c("F41.9","F41.0","F41.1")
