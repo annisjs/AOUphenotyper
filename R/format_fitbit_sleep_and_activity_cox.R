@@ -12,8 +12,10 @@ format_fitbit_sleep_and_activity_cox <- function(sleep,fitbit,dx,last_medical_en
 {
   sleep[,date := sleep_date]
   sleep[,hour_asleep := minute_asleep / 60]
+  sleep[,hour_light := minute_light / 60]
   sleep[,minute10_deep := minute_deep / 10]
   sleep[,minute10_rem := minute_rem / 10]
+  sleep[,efficiency := minute_asleep / minute_in_bed]
 
   sleep_activity <- merge(sleep,fitbit,by.x=c("person_id","sleep_date"),by.y=c("person_id","date"))
   merged_cox <- merge(sleep_activity,dx,by="person_id",all.x=TRUE)
@@ -47,6 +49,10 @@ format_fitbit_sleep_and_activity_cox <- function(sleep,fitbit,dx,last_medical_en
   merged_cox_baseline_agg <- merged_cox_baseline[,.(baseline_hour_asleep = mean(hour_asleep,na.rm=T),
                                                     baseline_minute10_rem = mean(minute10_rem,na.rm=T),
                                                     baseline_minute10_deep = mean(minute10_deep,na.rm=T),
+                                                    baseline_pct_rem = mean((minute_rem / minute_asleep) * 100,na.rm=T),
+                                                    baseline_pct_light = mean((minute_light / minute_asleep) * 100,na.rm=T),
+                                                    baseline_pct_deep = mean((minute_deep / minute_asleep) * 100,na.rm=T),
+                                                    baseline_efficiency = mean(efficiency,na.rm=T),
                                                     baseline_steps = mean(steps),
                                                     count = length(date)),.(person_id)]
   merged_cox_baseline_agg <- merged_cox_baseline_agg[count >= 15]
@@ -79,14 +85,25 @@ format_fitbit_sleep_and_activity_cox <- function(sleep,fitbit,dx,last_medical_en
   merged_cox[,count := length(minute_deep),.(person_id,time1,time2)]
   merged_cox <- merged_cox[count >= 15]
 
+  merged_cox[,count := length(minute_light),.(person_id,time1,time2)]
+  merged_cox <- merged_cox[count >= 15]
+
   #aggregate steps by month
   merged_cox_agg <- merged_cox[,.(mean_hour_asleep = mean(hour_asleep,na.rm=T),
                                   mean_minute10_rem = mean(minute10_rem,na.rm=T),
                                   mean_minute10_deep = mean(minute10_deep,na.rm=T),
+                                  mean_pct_rem = mean((minute_rem / minute_asleep) * 100,na.rm=T),
+                                  mean_pct_deep = mean((minute_deep / minute_asleep) * 100,na.rm=T),
+                                  mean_pct_light = mean((minute_light / minute_asleep) * 100,na.rm=T),
+                                  mean_efficiency = mean(efficiency,na.rm=T),
                                   mean_steps = mean(steps,na.rm=T),
                                   baseline_minute10_rem = baseline_minute10_rem[1],
                                   baseline_minute10_deep = baseline_minute10_deep[1],
                                   baseline_hour_asleep = baseline_hour_asleep[1],
+                                  baseline_pct_rem = baseline_pct_rem[1],
+                                  baseline_pct_light = baseline_pct_light[1],
+                                  baseline_pct_deep = baseline_pct_deep[1],
+                                  baseline_efficiency = baseline_efficiency[1],
                                   baseline_steps = baseline_steps[1],
                                   count = length(hour_asleep)),.(person_id,time1,time2)]
   merged_cox_agg <- merged_cox_agg[order(merged_cox_agg$time1,decreasing=FALSE)]
@@ -114,10 +131,18 @@ format_fitbit_sleep_and_activity_cox <- function(sleep,fitbit,dx,last_medical_en
                                       mean_hour_asleep=mean_hour_asleep,
                                       mean_minute10_rem = mean_minute10_rem,
                                       mean_minute10_deep = mean_minute10_deep,
+                                      mean_pct_rem = mean_pct_rem,
+                                      mean_pct_deep = mean_pct_deep,
+                                      mean_pct_light = mean_pct_light,
+                                      mean_efficiency = mean_efficiency,
                                       mean_steps = mean_steps,
                                       baseline_hour_asleep = baseline_hour_asleep,
                                       baseline_minute10_rem = baseline_minute10_rem,
                                       baseline_minute10_deep = baseline_minute10_deep,
+                                      baseline_pct_rem = baseline_pct_rem,
+                                      baseline_pct_deep = baseline_pct_deep,
+                                      baseline_pct_light = baseline_pct_light,
+                                      baseline_efficiency = baseline_efficiency,
                                       baseline_steps = baseline_steps),
                                    by=.(person_id)]
 
