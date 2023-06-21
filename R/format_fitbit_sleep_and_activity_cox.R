@@ -1,6 +1,6 @@
 #' Format Fitbit activity and sleep data for time varying Cox model
 #'
-#' @param fitbit data.table with columns: person_id, date, minute_asleep, minute_rem, minute_deep, steps
+#' @param sleep_pa data.table with columns: person_id, date, minute_asleep, minute_rem, minute_deep, minute_light, minute_in_bed, steps
 #' @param dx data.table with columns: person_id, dx_entry_date, dx_status
 #' @param last_medical_encounter data.table with columns: person_id, last_medical_encounter_entry_date
 #'
@@ -8,16 +8,14 @@
 #' @import data.table
 #' @export
 #'
-format_fitbit_sleep_and_activity_cox <- function(sleep,fitbit,dx,last_medical_encounter)
+format_fitbit_sleep_and_activity_cox <- function(sleep_pa,dx,last_medical_encounter)
 {
-  sleep[,date := sleep_date]
   sleep[,hour_asleep := minute_asleep / 60]
   sleep[,hour_light := minute_light / 60]
   sleep[,minute10_deep := minute_deep / 10]
   sleep[,minute10_rem := minute_rem / 10]
   sleep[,efficiency := minute_asleep / minute_in_bed]
 
-  sleep_activity <- merge(sleep,fitbit,by.x=c("person_id","sleep_date"),by.y=c("person_id","date"))
   merged_cox <- merge(sleep_activity,dx,by="person_id",all.x=TRUE)
   merged_cox[, had_before := as.numeric(dx_entry_date - min(date)) <= 180, .(person_id)]
   merged_cox <- merged_cox[had_before == FALSE | is.na(had_before)]
