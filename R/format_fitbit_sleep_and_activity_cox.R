@@ -10,13 +10,13 @@
 #'
 format_fitbit_sleep_and_activity_cox <- function(sleep_pa,dx,last_medical_encounter)
 {
-  sleep[,hour_asleep := minute_asleep / 60]
-  sleep[,hour_light := minute_light / 60]
-  sleep[,minute10_deep := minute_deep / 10]
-  sleep[,minute10_rem := minute_rem / 10]
-  sleep[,efficiency := minute_asleep / minute_in_bed]
+  sleep_pa[,hour_asleep := minute_asleep / 60]
+  sleep_pa[,hour_light := minute_light / 60]
+  sleep_pa[,minute10_deep := minute_deep / 10]
+  sleep_pa[,minute10_rem := minute_rem / 10]
+  sleep_pa[,efficiency := minute_asleep / minute_in_bed]
 
-  merged_cox <- merge(sleep_activity,dx,by="person_id",all.x=TRUE)
+  merged_cox <- merge(sleep_pa,dx,by="person_id",all.x=TRUE)
   merged_cox[, had_before := as.numeric(dx_entry_date - min(date)) <= 180, .(person_id)]
   merged_cox <- merged_cox[had_before == FALSE | is.na(had_before)]
   merged_cox <- merge(merged_cox,last_medical_encounter,all.x=TRUE)
