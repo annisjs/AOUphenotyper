@@ -34,6 +34,11 @@ format_fitbit_sleep_and_activity_cox <- function(sleep_pa,dx,last_medical_encoun
   merged_cox$max_date[is.na(merged_cox$max_date)] <- merged_cox$last_medical_encounter_entry_date[is.na(merged_cox$max_date)]
   merged_cox <- merged_cox[date <= max_date]
 
+  cat("\n")
+  cat("\nExclude any that have no data before censor date:")
+  cat("\nN:",length(unique(merged_cox$person_id)))
+  cat("\nDays:",nrow(merged_cox))
+
   #Fork baseline dataset from main dataset
   merged_cox[,baseline_marker := (date - min(date)) <= 180,.(person_id)]
   merged_cox_baseline <- merged_cox[baseline_marker == TRUE]
