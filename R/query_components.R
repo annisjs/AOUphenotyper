@@ -139,7 +139,7 @@ med_query <- function(dataset,meds)
 verbose_med_query <- function(dataset,meds)
 {
   med_terms <- paste('lower(c.concept_name) LIKE ',"'%",meds,"%'",collapse=' OR ',sep="")
-  med_query <- str_glue("
+  query <- str_glue("
     SELECT person_id,c.concept_id,c.concept_name,d.drug_exposure_start_date,
     d.drug_exposure_end_date,d.refills,d.stop_reason,c2.concept_name
         FROM
@@ -151,6 +151,8 @@ verbose_med_query <- function(dataset,meds)
         INNER JOIN
         {dataset}.concept c2
         ON (d.drug_type_concept_id = c2.concept_id)
+        WHERE
+        {med_terms}
 ")
   download_data(query)
 }
