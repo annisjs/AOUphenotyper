@@ -4,7 +4,7 @@
 \alias{lab_query_concept_id}
 \title{Lab query using concept IDs}
 \usage{
-lab_query_concept_id(dataset, labs)
+lab_query_concept_id(dataset, labs, page_size = NULL)
 }
 \description{
 Lab query using concept IDs

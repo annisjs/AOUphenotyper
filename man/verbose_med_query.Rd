@@ -4,7 +4,7 @@
 \alias{verbose_med_query}
 \title{Verbose medication query}
 \usage{
-verbose_med_query(dataset, meds)
+verbose_med_query(dataset, meds, page_size = NULL)
 }
 \description{
 Verbose medication query

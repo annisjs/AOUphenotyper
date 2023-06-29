@@ -1,6 +1,6 @@
 #' CPT query
 #' @export
-cpt_query <- function(dataset,cpt_codes)
+cpt_query <- function(dataset,cpt_codes,page_size=NULL)
 {
   cpt_terms <- paste('c.CONCEPT_CODE LIKE ',"'",cpt_codes,"'",collapse=' OR ',sep="")
   query <- str_glue("
@@ -13,13 +13,13 @@ cpt_query <- function(dataset,cpt_codes)
         c.CONCEPT_ID = p.PROCEDURE_SOURCE_CONCEPT_ID AND
         ({cpt_terms})
     ")
-  download_data(query)
+  download_data(query,page_size)
 }
 
 
 #' High BP query (>= 140/90)
 #' @export
-high_bp_query <- function(dataset)
+high_bp_query <- function(dataset,page_size=NULL)
 {
   bp_query <- str_glue("
     WITH diatb AS (SELECT
@@ -43,14 +43,14 @@ high_bp_query <- function(dataset)
     AND dia >= 90
     GROUP BY d.person_id
     ")
-  result <- download_data(bp_query)
+  result <- download_data(bp_query,page_size)
   return(result)
 }
 
 
 #' ICD9 Query
 #' @export
-icd9_query <- function(dataset,icd9_codes)
+icd9_query <- function(dataset,icd9_codes,page_size=NULL)
 {
   icd9_terms <- paste('co.CONDITION_SOURCE_VALUE LIKE ',"'",icd9_codes,"'",collapse=' OR ',sep="")
   query <-str_glue("
@@ -64,12 +64,12 @@ icd9_query <- function(dataset,icd9_codes)
         c.VOCABULARY_ID LIKE 'ICD9CM' AND
         ({icd9_terms})
     ")
-  download_data(query)
+  download_data(query,page_size)
 }
 
 #' ICD10 Query
 #' @export
-icd10_query <- function(dataset,icd10_codes)
+icd10_query <- function(dataset,icd10_codes,page_size=NULL)
 {
   icd10_terms <- paste('co.CONDITION_SOURCE_VALUE LIKE ',"'",icd10_codes,"'",collapse=' OR ',sep="")
   query <-  str_glue("
@@ -83,12 +83,12 @@ icd10_query <- function(dataset,icd10_codes)
         c.VOCABULARY_ID LIKE 'ICD10CM' AND
         ({icd10_terms})
     ")
-  download_data(query)
+  download_data(query,page_size)
 }
 
 #' Lab query using concept IDs
 #' @export
-lab_query_concept_id <- function(dataset,labs)
+lab_query_concept_id <- function(dataset,labs,page_size=NULL)
 {
   labs <- paste0("'",paste(labs,sep="",collapse="','"),"'")
   query <- str_glue("
@@ -97,12 +97,12 @@ lab_query_concept_id <- function(dataset,labs)
         WHERE
             measurement_source_value IN ({labs})
         ")
-  download_data(query)
+  download_data(query,page_size)
 }
 
 #' Lab query
 #' @export
-lab_query <- function(dataset,labs)
+lab_query <- function(dataset,labs,page_size=NULL)
 {
   lab_terms <- paste('c.concept_name LIKE ',"'",labs,"'",collapse=' OR ',sep="")
   query <- str_glue("
@@ -112,12 +112,12 @@ lab_query <- function(dataset,labs)
         WHERE
         ({lab_terms})
         ")
-  download_data(query)
+  download_data(query,page_size)
 }
 
 #' Medication query
 #' @export
-med_query <- function(dataset,meds)
+med_query <- function(dataset,meds,page_size=NULL)
 {
   med_terms <- paste('lower(c.concept_name) LIKE ',"'%",meds,"%'",collapse=' OR ',sep="")
   query <- str_glue("
@@ -130,13 +130,13 @@ med_query <- function(dataset,meds)
         WHERE
         {med_terms}
     ")
-  download_data(query)
+  download_data(query,page_size)
 }
 
 
 #' Verbose medication query
 #' @export
-verbose_med_query <- function(dataset,meds)
+verbose_med_query <- function(dataset,meds,page_size=NULL)
 {
   med_terms <- paste('lower(c.concept_name) LIKE ',"'%",meds,"%'",collapse=' OR ',sep="")
   query <- str_glue("
@@ -156,12 +156,12 @@ verbose_med_query <- function(dataset,meds)
         WHERE
         {med_terms}
     ")
-  dat <- download_data(query)
+  dat <- download_data(query,page_size)
 }
 
 #' Combination medication query
 #' @export
-combo_med_query <- function(dataset,meds)
+combo_med_query <- function(dataset,meds,page_size=NULL)
 {
   med_terms <- paste('lower(c.concept_name) LIKE ',"'%",meds,"%'",collapse=' AND ',sep="")
   query <- str_glue("
@@ -181,12 +181,12 @@ combo_med_query <- function(dataset,meds)
         WHERE
         {med_terms}
     ")
-  dat <- download_data(query,NULL)
+  dat <- download_data(query,page_size)
 }
 
 #' Medication query returning first date
 #' @export
-med_query_min_date <- function(dataset,meds)
+med_query_min_date <- function(dataset,meds,page_size=NULL)
 {
   med_terms <- paste('lower(c.concept_name) LIKE ',"'%",meds,"%'",collapse=' OR ',sep="")
   query <- str_glue("
@@ -200,12 +200,12 @@ med_query_min_date <- function(dataset,meds)
         {med_terms}
         GROUP BY d.person_id
     ")
-  download_data(query)
+  download_data(query,page_size)
 }
 
 #' Inpatient ICD query
 #' @export
-inpatient_icd_query <- function(dataset,codes)
+inpatient_icd_query <- function(dataset,codes,page_size=NULL)
 {
   code_clause <- paste('co.CONDITION_SOURCE_VALUE LIKE ',"'",codes,"'",collapse=' OR ',sep="")
   query <- str_glue(
@@ -227,12 +227,12 @@ inpatient_icd_query <- function(dataset,codes)
             38000211,38000212,38000213) OR
             v.visit_concept_id = 9201)
         ")
-  download_data(query)
+  download_data(query,page_size)
 }
 
 #' Outpatient ICD query
 #' @export
-outpatient_icd_query <- function(dataset,codes)
+outpatient_icd_query <- function(dataset,codes,page_size=NULL)
 {
   code_clause <- paste('co.CONDITION_SOURCE_VALUE LIKE ',"'",codes,"'",collapse=' OR ',sep="")
   query <- str_glue(
@@ -254,5 +254,5 @@ outpatient_icd_query <- function(dataset,codes)
             38000242,38000243,38000244) OR
             v.visit_concept_id = 9202)
         ")
-  download_data(query)
+  download_data(query,page_size)
 }

@@ -4,7 +4,7 @@
 \alias{download_data}
 \title{Download data given query}
 \usage{
-download_data(query, page_size = 1e+05)
+download_data(query, page_size = NULL)
 }
 \arguments{
 \item{query}{a SQL query string}

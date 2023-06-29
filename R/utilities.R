@@ -33,7 +33,7 @@ read_bucket <- function(export_path) {
 #' @return a data.table
 #' @export
 #' @import data.table bigrquery
-download_data <- function(query,page_size=100000) {
+download_data <- function(query,page_size=NULL) {
   tb <- bq_project_query(Sys.getenv('GOOGLE_PROJECT'), query)
   as.data.table(bq_table_download(tb,page_size=page_size))
 }

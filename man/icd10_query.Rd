@@ -4,7 +4,7 @@
 \alias{icd10_query}
 \title{ICD10 Query}
 \usage{
-icd10_query(dataset, icd10_codes)
+icd10_query(dataset, icd10_codes, page_size = NULL)
 }
 \description{
 ICD10 Query

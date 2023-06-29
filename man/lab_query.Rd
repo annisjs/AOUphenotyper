@@ -4,7 +4,7 @@
 \alias{lab_query}
 \title{Lab query}
 \usage{
-lab_query(dataset, labs)
+lab_query(dataset, labs, page_size = NULL)
 }
 \description{
 Lab query

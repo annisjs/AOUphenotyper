@@ -4,7 +4,7 @@
 \alias{outpatient_icd_query}
 \title{Outpatient ICD query}
 \usage{
-outpatient_icd_query(dataset, codes)
+outpatient_icd_query(dataset, codes, page_size = NULL)
 }
 \description{
 Outpatient ICD query

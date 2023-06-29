@@ -4,7 +4,7 @@
 \alias{combo_med_query}
 \title{Combination medication query}
 \usage{
-combo_med_query(dataset, meds)
+combo_med_query(dataset, meds, page_size = NULL)
 }
 \description{
 Combination medication query

@@ -4,7 +4,7 @@
 \alias{cpt_query}
 \title{CPT query}
 \usage{
-cpt_query(dataset, cpt_codes)
+cpt_query(dataset, cpt_codes, page_size = NULL)
 }
 \description{
 CPT query

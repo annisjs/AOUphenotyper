@@ -4,7 +4,7 @@
 \alias{high_bp_query}
 \title{High BP query (>= 140/90)}
 \usage{
-high_bp_query(dataset)
+high_bp_query(dataset, page_size = NULL)
 }
 \description{
 High BP query (>= 140/90)

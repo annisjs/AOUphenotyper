@@ -4,7 +4,7 @@
 \alias{med_query}
 \title{Medication query}
 \usage{
-med_query(dataset, meds)
+med_query(dataset, meds, page_size = NULL)
 }
 \description{
 Medication query

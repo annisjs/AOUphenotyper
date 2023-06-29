@@ -4,7 +4,7 @@
 \alias{med_query_min_date}
 \title{Medication query returning first date}
 \usage{
-med_query_min_date(dataset, meds)
+med_query_min_date(dataset, meds, page_size = NULL)
 }
 \description{
 Medication query returning first date
