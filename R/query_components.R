@@ -256,3 +256,24 @@ outpatient_icd_query <- function(dataset,codes,page_size=NULL)
         ")
   download_data(query,page_size)
 }
+
+#' Survey query
+#' @export
+survey_query <- function(dataset,survey_code,page_size=NULL)
+{
+  survey_codes <- paste0(survey_codes,collapse=",")
+  query <- str_glue("
+        SELECT
+            survey.person_id,
+            survey.answer AS survey_response,
+            CAST(survey.survey_datetime AS DATE) AS survey_date
+        FROM
+            `{dataset}.ds_survey` survey
+        WHERE
+            (
+                question_concept_id IN (
+                          {survey_codes}
+                )
+            )")
+  download_data(query,page_size)
+}
