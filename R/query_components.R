@@ -259,7 +259,7 @@ outpatient_icd_query <- function(dataset,codes,page_size=NULL)
 
 #' Survey query
 #' @export
-survey_query <- function(dataset,survey_code,page_size=NULL)
+survey_query <- function(dataset,survey_codes,page_size=NULL)
 {
   survey_codes <- paste0(survey_codes,collapse=",")
   query <- str_glue("
