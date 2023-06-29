@@ -133,6 +133,49 @@ med_query <- function(dataset,meds)
   download_data(query)
 }
 
+
+#' Verbose medication query
+#' @export
+verbose_med_query <- function(dataset,meds)
+{
+  med_terms <- paste('lower(c.concept_name) LIKE ',"'%",meds,"%'",collapse=' OR ',sep="")
+  med_query <- str_glue("
+    WITH cohort AS (
+        SELECT
+          DISTINCT person_id
+        FROM `{dataset}.heart_rate_minute_level`
+
+        UNION DISTINCT
+        SELECT
+          DISTINCT person_id
+        FROM `{dataset}.heart_rate_summary`
+
+        UNION DISTINCT
+        SELECT
+          DISTINCT person_id
+        FROM `{dataset}.steps_intraday`
+
+        UNION DISTINCT
+        SELECT
+          DISTINCT person_id
+        FROM `{dataset}.activity_summary`)
+    SELECT cohort.person_id,c.concept_id,c.concept_name,d.drug_exposure_start_date,
+    d.drug_exposure_end_date,d.refills,d.stop_reason,c2.concept_name
+        FROM
+        cohort
+        INNER JOIN
+        {dataset}.drug_exposure d
+        ON (cohort.person_id = d.person_id)
+        INNER JOIN
+        {dataset}.concept c
+        ON (d.drug_concept_id = c.concept_id)
+        INNER JOIN
+        {dataset}.concept c2
+        ON (d.drug_type_concept_id = c2.concept_id)
+")
+  download_data(query)
+}
+
 #' Medication query returning first date
 #' @export
 med_query_min_date <- function(dataset,meds)
