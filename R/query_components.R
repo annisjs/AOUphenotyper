@@ -159,6 +159,31 @@ verbose_med_query <- function(dataset,meds)
   dat <- download_data(query)
 }
 
+#' Combination medication query
+#' @export
+combo_med_query <- function(dataset,meds)
+{
+  med_terms <- paste('lower(c.concept_name) LIKE ',"'%",meds,"%'",collapse=' AND ',sep="")
+  query <- str_glue("
+    SELECT person_id,
+    d.drug_exposure_start_date,
+    c.concept_name AS drug_name,
+    d.refills,
+    c2.concept_name AS route
+        FROM
+        {dataset}.drug_exposure d
+        INNER JOIN
+        {dataset}.concept c
+        ON (d.drug_concept_id = c.concept_id)
+        INNER JOIN
+        {dataset}.concept c2
+        ON (d.route_concept_id = c2.concept_id)
+        WHERE
+        {med_terms}
+    ")
+  dat <- download_data(query,NULL)
+}
+
 #' Medication query returning first date
 #' @export
 med_query_min_date <- function(dataset,meds)

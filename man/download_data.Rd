@@ -4,10 +4,12 @@
 \alias{download_data}
 \title{Download data given query}
 \usage{
-download_data(query)
+download_data(query, page_size = 1e+05)
 }
 \arguments{
-\item{a}{SQL query string}
+\item{query}{a SQL query string}
+
+\item{page_size}{The number of rows requested per chunk}
 }
 \value{
 a data.table
