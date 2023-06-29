@@ -140,21 +140,23 @@ verbose_med_query <- function(dataset,meds)
 {
   med_terms <- paste('lower(c.concept_name) LIKE ',"'%",meds,"%'",collapse=' OR ',sep="")
   query <- str_glue("
-    SELECT person_id,c.concept_id,c.concept_name,d.drug_exposure_start_date,
-    d.drug_exposure_end_date,d.refills,d.stop_reason,c2.concept_name
+    SELECT person_id,
+    d.drug_exposure_start_date,
+    c.concept_name AS drug_name,
+    d.refills,
+    c2.concept_name AS route
         FROM
         {dataset}.drug_exposure d
-        ON (person_id = d.person_id)
         INNER JOIN
         {dataset}.concept c
         ON (d.drug_concept_id = c.concept_id)
         INNER JOIN
         {dataset}.concept c2
-        ON (d.drug_type_concept_id = c2.concept_id)
+        ON (d.route_concept_id = c2.concept_id)
         WHERE
         {med_terms}
-")
-  download_data(query)
+    ")
+  dat <- download_data(query)
 }
 
 #' Medication query returning first date
