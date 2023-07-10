@@ -227,7 +227,8 @@ format_clust_cox <- function(clust_dat,dx,last_medical_encounter,verbose=TRUE)
     cat("\nDays:",nrow(merged_cox))
   }
   #aggregate steps by month
-  merged_cox_baseline_agg <- merged_cox_baseline[,.(baseline_c1 = length(which(daily_class == 1))/length(daily_class),
+  merged_cox_baseline_agg <- merged_cox_baseline[,.(baseline_steps = mean(steps),
+                                                    baseline_c1 = length(which(daily_class == 1))/length(daily_class),
                                                     baseline_c2 = length(which(daily_class == 2))/length(daily_class),
                                                     baseline_c3 = length(which(daily_class == 3))/length(daily_class),
                                                     baseline_c4 = length(which(daily_class == 4))/length(daily_class),
@@ -281,7 +282,9 @@ format_clust_cox <- function(clust_dat,dx,last_medical_encounter,verbose=TRUE)
                                   baseline_c4 = baseline_c4[1],
                                   baseline_c5 = baseline_c5[1],
                                   baseline_mean_dc = baseline_mean_dc[1],
-                                  count = length(date)),.(person_id,time1,time2)]
+                                  count = length(date),
+                                  mean_steps = mean(steps),
+                                  baseline_steps = baseline_steps[1]),.(person_id,time1,time2)]
   merged_cox_agg <- merged_cox_agg[order(merged_cox_agg$time1,decreasing=FALSE)]
 
   if (verbose)
@@ -315,7 +318,9 @@ format_clust_cox <- function(clust_dat,dx,last_medical_encounter,verbose=TRUE)
                                       baseline_c2 = baseline_c2,
                                       baseline_c3 = baseline_c3,
                                       baseline_c4 = baseline_c4,
-                                      baseline_c5 = baseline_c5),
+                                      baseline_c5 = baseline_c5,
+                                      mean_steps = mean_steps,
+                                      baseline_steps = baseline_steps),
                                    .(person_id)]
 
   # Do a little tidying to keep those with a single month as a single row.
