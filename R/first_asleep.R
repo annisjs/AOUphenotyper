@@ -14,7 +14,8 @@ first_asleep <- function(dataset,output_folder,anchor_date_table=NULL,before=NUL
         SELECT person_id,
                sleep_date AS first_asleep_date,
                start_datetime AS first_asleep_datetime,
-               duration_in_min AS first_asleep_duration
+               duration_in_min AS first_asleep_duration,
+               is_main_sleep AS first_asleep_is_main_sleep
         FROM (SELECT person_id, sleep_date, start_datetime, duration_in_min,
                row_number() over(partition by person_id, sleep_date order by start_datetime asc) as rn
                 FROM sleep_level
@@ -32,7 +33,8 @@ first_asleep <- function(dataset,output_folder,anchor_date_table=NULL,before=NUL
     result[,max_window_date := anchor_date + after]
     result <- result[first_asleep_date >= min_window_date]
     result <- result[first_asleep_date <= max_window_date]
-    result <- result[,c("person_id","first_asleep_datetime","first_asleep_date","first_asleep_duration")]
+    result <- result[,c("person_id","first_asleep_datetime","first_asleep_date","first_asleep_duration",
+                        "first_asleep_is_main_sleep")]
   }
   fwrite(result,file="first_asleep.csv")
   system(str_glue("gsutil cp first_asleep.csv {output_folder}/first_asleep.csv"),intern=TRUE)
