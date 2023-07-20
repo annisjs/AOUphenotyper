@@ -13,7 +13,8 @@ first_light_sleep <- function(dataset,output_folder,anchor_date_table=NULL,befor
   query <- paste("
         SELECT person_id,
                min(start_datetime) AS first_light_sleep_datetime,
-               sleep_date as first_light_sleep_date
+               sleep_date as first_light_sleep_date,
+               is_main_sleep as first_light_sleep_is_main_sleep
         FROM sleep_level
         WHERE level = 'light'
         GROUP BY person_id, sleep_date", sep="")
@@ -29,7 +30,7 @@ first_light_sleep <- function(dataset,output_folder,anchor_date_table=NULL,befor
     result[,max_window_date := anchor_date + after]
     result <- result[first_light_sleep_date >= min_window_date]
     result <- result[first_light_sleep_date <= max_window_date]
-    result <- result[,c("person_id","first_light_sleep_datetime","first_light_sleep_date")]
+    result <- result[,c("person_id","first_light_sleep_datetime","first_light_sleep_date","first_light_sleep_is_main_sleep")]
   }
   fwrite(result,file="first_light_sleep.csv")
   system(str_glue("gsutil cp first_light_sleep.csv {output_folder}/first_light_sleep.csv"),intern=TRUE)

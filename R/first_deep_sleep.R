@@ -13,7 +13,8 @@ first_deep_sleep <- function(dataset,output_folder,anchor_date_table=NULL,before
   query <- paste("
         SELECT person_id,
                min(start_datetime) AS first_deep_sleep_datetime,
-               sleep_date as first_deep_sleep_date
+               sleep_date as first_deep_sleep_date,
+               is_main_sleep as first_deep_sleep_is_main_sleep
         FROM sleep_level
         WHERE level = 'deep'
         GROUP BY person_id, sleep_date", sep="")
@@ -29,7 +30,7 @@ first_deep_sleep <- function(dataset,output_folder,anchor_date_table=NULL,before
     result[,max_window_date := anchor_date + after]
     result <- result[first_deep_sleep_date >= min_window_date]
     result <- result[first_deep_sleep_date <= max_window_date]
-    result <- result[,c("person_id","first_deep_sleep_datetime","first_deep_sleep_date")]
+    result <- result[,c("person_id","first_deep_sleep_datetime","first_deep_sleep_date","first_deep_sleep_is_main_sleep")]
   }
   fwrite(result,file="first_deep_sleep.csv")
   system(str_glue("gsutil cp first_deep_sleep.csv {output_folder}/first_deep_sleep.csv"),intern=TRUE)
