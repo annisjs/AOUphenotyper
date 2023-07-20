@@ -11,14 +11,16 @@
 first_wake <- function(dataset,output_folder,anchor_date_table=NULL,before=NULL,after=NULL)
 {
   query <- paste("
-        SELECT
-            person_id,
-            min(start_datetime) AS first_wake_datetime,
-            sleep_date as first_wake_date,
-            is_main_sleep as first_wake_is_main_sleep
-        FROM sleep_level
-        WHERE level = 'wake'
-        GROUP BY person_id, sleep_date", sep="")
+        SELECT person_id,
+              sleep_date AS first_wake_date,
+              start_datetime AS first_wake_datetime,
+              duration_in_min AS first_wake_duration,
+              is_main_sleep AS first_wake_is_main_sleep
+        FROM (SELECT person_id, sleep_date, start_datetime, duration_in_min, is_main_sleep,
+              row_number() over(partition by person_id, sleep_date order by start_datetime asc) as rn
+              FROM sleep_level
+              WHERE level = 'wake') as t1
+        WHERE rn = 1", sep="")
   bq_table_save(
     bq_dataset_query(dataset, query, billing = Sys.getenv("GOOGLE_PROJECT")),
     paste0(output_folder,"/aou_phenotyper/first_wake_*.csv"),
@@ -31,7 +33,8 @@ first_wake <- function(dataset,output_folder,anchor_date_table=NULL,before=NULL,
     result[,max_window_date := anchor_date + after]
     result <- result[first_wake_date >= min_window_date]
     result <- result[first_wake_date <= max_window_date]
-    result <- result[,c("person_id","first_wake_datetime","first_wake_date","first_wake_is_main_sleep")]
+    result <- result[,c("person_id","first_wake_date","first_wake_datetime",
+                        "first_wake_duration","first_wake_is_main_sleep")]
   }
   fwrite(result,file="first_wake.csv")
   system(str_glue("gsutil cp first_wake.csv {output_folder}/first_wake.csv"),intern=TRUE)
