@@ -4,7 +4,7 @@
 \alias{survey_query}
 \title{Survey query}
 \usage{
-survey_query(dataset, survey_code, page_size = NULL)
+survey_query(dataset, survey_codes, page_size = NULL)
 }
 \description{
 Survey query
