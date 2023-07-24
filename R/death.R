@@ -7,7 +7,7 @@ death <- function(dataset,output_folder,anchor_date_table=NULL,before=NULL,after
   query <- str_glue("
         SELECT
             person_id,
-            death_entry_date
+            death_date AS death_entry_date
         FROM
             {dataset}.death")
   result <- download_data(query)
