@@ -19,7 +19,7 @@ death <- function(dataset,output_folder,anchor_date_table=NULL,before=NULL,after
     result <- result[death_date >= min_window_date]
     result <- result[death_date <= max_window_date]
   }
-  result <- result[,c("person_id","death_date")]
+  result <- result[,c("person_id","death_entry_date")]
   fwrite(result,file="death.csv")
   system(str_glue("gsutil cp death.csv {output_folder}/death.csv"),intern=TRUE)
 }
