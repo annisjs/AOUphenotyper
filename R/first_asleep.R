@@ -5,22 +5,22 @@
 #' @param before an integer greater than or equal to 0. Dates prior to anchor_date + before will be excluded.
 #' @param after an integer greater than or equal to 0. Dates after anchor_date + after will be excluded.
 #' @return output_folder/first_asleep.csv
-#' @details First asleep level, date and time
+#' @details First asleep level, date and time where is_main_sleep = true
 #' @import stringr bigrquery
 #' @export
 first_asleep <- function(dataset,output_folder,anchor_date_table=NULL,before=NULL,after=NULL)
 {
   query <- paste("
         SELECT person_id,
-               sleep_date AS first_asleep_date,
-               start_datetime AS first_asleep_datetime,
-               duration_in_min AS first_asleep_duration,
-               is_main_sleep AS first_asleep_is_main_sleep
-        FROM (SELECT person_id, sleep_date, start_datetime, duration_in_min, is_main_sleep,
-               row_number() over(partition by person_id, sleep_date order by start_datetime asc) as rn
-                FROM sleep_level
-                WHERE level = 'asleep') as t1
-        WHERE rn = 1",sep="")
+           sleep_date AS first_asleep_date,
+           start_datetime AS first_asleep_datetime,
+           duration_in_min AS first_asleep_duration,
+           is_main_sleep AS first_asleep_is_main_sleep
+    FROM (SELECT person_id, sleep_date, start_datetime, duration_in_min, is_main_sleep,
+           row_number() over(partition by person_id, sleep_date order by start_datetime asc) as rn
+            FROM sleep_level
+            WHERE level = 'asleep' AND is_main_sleep = 'true') as t1
+    WHERE rn = 1",sep="")
   bq_table_save(
     bq_dataset_query(dataset, query, billing = Sys.getenv("GOOGLE_PROJECT")),
     paste0(output_folder,"/aou_phenotyper/first_asleep_*.csv"),

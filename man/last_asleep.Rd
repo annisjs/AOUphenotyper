@@ -30,5 +30,5 @@ output_folder/last_asleep.csv
 Last asleep datetime
 }
 \details{
-last asleep level, date and time
+last asleep level, date and time where is_main_sleep = true
 }

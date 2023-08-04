@@ -30,5 +30,5 @@ output_folder/first_asleep.csv
 First asleep datetime
 }
 \details{
-First asleep level, date and time
+First asleep level, date and time where is_main_sleep = true
 }
