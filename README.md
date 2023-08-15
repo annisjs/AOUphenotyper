@@ -10,6 +10,7 @@ devtools::install_github("annisjs/AOUphenotyper",upgrade=F)
 
 # Example
 ```r
+library(stringr)
 library(AOUphenotyper)
 
 # Your workspace bucket
