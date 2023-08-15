@@ -10,6 +10,8 @@ devtools::install_github("annisjs/AOUphenotyper",upgrade=F,dependencies = F)
 
 # Example
 ```r
+library(AOUphenotyper)
+
 # Your workspace bucket
 my_bucket <- Sys.getenv("WORKSPACE_BUCKET")
 
