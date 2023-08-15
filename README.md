@@ -5,7 +5,7 @@ AOUphenotyper is an R package whose goal is to assist in data pulls and analysis
 # Installation
 In an R notebook on the AOU workbench:
 ```r
-devtools::install_github("annisjs/AOUphenotyper",upgrade=F,dependencies = F)
+devtools::install_github("annisjs/AOUphenotyper",upgrade=F)
 ```
 
 # Example
