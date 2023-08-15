@@ -22,8 +22,10 @@ output_folder <- str_glue("{my_bucket}/datasets")
 afib(dataset,output_folder)
 smoking(dataset,output_folder)
 education(dataset,output_folder)
+demographics(dataset,output_folder)
 
 afib_dat <- read_bucket("datasets/afib.csv")
 smoking_dat <- read_bucket("datasets/smoking.csv")
 education_dat <- read_bucket("datasets/education.csv") 
+dem <- read_bucket("datasets/demographics.csv")
 ```
