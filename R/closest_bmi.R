@@ -60,19 +60,6 @@ closest_bmi <-  function(dataset,output_folder,anchor_date_table=NULL,before=NUL
                     )
                 ) measurement")
 
-  result_all <- download_data(query)
-  result_all <- as.data.table(merge(result_all,anchor_date_table,by="person_id",allow.cartesian=TRUE))
-  result_all[,min_window_date := anchor_date + before]
-  result_all[,max_window_date := anchor_date + after]
-  result_all <- result_all[measurement_date >= min_window_date]
-  result_all <- result_all[measurement_date <= max_window_date]
-  result_all[,diff := abs(as.numeric(as.Date(measurement_date) - as.Date(anchor_date)))]
-  result_all <- result_all[order(diff)]
-  result_all <- result_all[,.(closest_bmi_entry_date = measurement_date[1],
-                              closest_bmi_value = value_as_number[1]),.(person_id,anchor_date)]
-  fwrite(result_all,file="closest_bmi.csv")
-  system(str_glue("gsutil cp closest_bmi.csv {output_folder}/closest_bmi.csv"),intern=TRUE)
-
   query <- str_glue("
         SELECT
             measurement.person_id,
