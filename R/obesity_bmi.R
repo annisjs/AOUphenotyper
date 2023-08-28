@@ -197,7 +197,7 @@ obesity_bmi <- function(dataset,output_folder,anchor_date_table=NULL,before=NULL
   result_all <- rbind(result_all,result_bmi)
   result_all <- result_all[order(bmi_date)]
   result_all <- result_all[bmi >= 30]
-  result_all <- result_all[,.(obesity_bmi_entry_date = bmi_date[1],
+  result_all <- result_all[,.(obesity_bmi_entry_date = measurement_date[1],
                               obesity_bmi_value = bmi[1]),
                            .(person_id)]
 
