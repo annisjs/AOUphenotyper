@@ -192,7 +192,7 @@ obesity_bmi <- function(dataset,output_folder,anchor_date_table=NULL,before=NULL
   }
 
   result_height <- result_height[order(height,decreasing=T)]
-  result_height <- result_height[,.(max_height := height[1]),.(person_id)]
+  result_height <- result_height[,.(max_height = height[1]),.(person_id)]
 
   result_all <- merge(result_weight,result_height,by=c("person_id"))
   result_all[, bmi := weight / (max_height/100)^2]
