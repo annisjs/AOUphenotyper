@@ -61,8 +61,8 @@ obesity_bmi <- function(dataset,output_folder,anchor_date_table=NULL,before=NULL
     result_bmi <- as.data.table(merge(result_bmi,anchor_date_table,by="person_id"))
     result_bmi[,min_window_date := anchor_date + before]
     result_bmi[,max_window_date := anchor_date + after]
-    result_bmi <- result_bmi[bmi_date >= min_window_date]
-    result_bmi <- result_bmi[bmi_date <= max_window_date]
+    result_bmi <- result_bmi[measurement_date >= min_window_date]
+    result_bmi <- result_bmi[measuremet_date <= max_window_date]
   }
 
   # Height
@@ -193,9 +193,8 @@ obesity_bmi <- function(dataset,output_folder,anchor_date_table=NULL,before=NULL
 
   result_all <- merge(result_height,result_weight,by=c("person_id","measurement_date"))
   result_all[, bmi := weight / (height/100)^2]
-  result_all <- result_all[,c("person_id","measurement_date","bmi")]
   result_all <- rbind(result_all,result_bmi)
-  result_all <- result_all[order(bmi_date)]
+  result_all <- result_all[order(measurement_date)]
   result_all <- result_all[bmi >= 30]
   result_all <- result_all[,.(obesity_bmi_entry_date = measurement_date[1],
                               obesity_bmi_value = bmi[1]),
