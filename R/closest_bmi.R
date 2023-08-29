@@ -184,8 +184,8 @@ closest_bmi <-  function(dataset,output_folder,anchor_date_table=NULL,before=NUL
   result_weight <- as.data.table(merge(result_weight,anchor_date_table,by="person_id",allow.cartesian=TRUE))
   result_weight[,min_window_date := anchor_date + before]
   result_weight[,max_window_date := anchor_date + after]
-  result_weight <- result_height[measurement_date >= min_window_date]
-  result_weight <- result_height[measurement_date <= max_window_date]
+  result_weight <- result_weight[measurement_date >= min_window_date]
+  result_weight <- result_weight[measurement_date <= max_window_date]
 
   # Compute BMI from height and weight
   result_hw <- merge(result_height,result_weight,by=c("person_id","measurement_date"))
