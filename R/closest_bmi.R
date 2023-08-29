@@ -15,52 +15,8 @@ closest_bmi <-  function(dataset,output_folder,anchor_date_table=NULL,before=NUL
     stop("closest_bmi is not a primary variable and requires an anchor date table.")
   }
 
-  query <- str_glue("
-        SELECT
-            measurement.person_id,
-            measurement.measurement_date,
-            measurement.value_as_number
-        FROM
-            ( SELECT
-                *
-            FROM
-                `{dataset}.measurement` measurement
-            WHERE
-                (
-                    measurement_concept_id IN  (
-                        SELECT
-                            DISTINCT c.concept_id
-                        FROM
-                            `{dataset}.cb_criteria` c
-                        JOIN
-                            (
-                                select
-                                    cast(cr.id as string) as id
-                                FROM
-                                    `{dataset}.cb_criteria` cr
-                                WHERE
-                                    concept_id IN (
-                                        3038553
-                                    )
-                                    AND full_text LIKE '%_rank1]%'
-                            ) a
-                                ON (
-                                    c.path LIKE CONCAT('%.',
-                                a.id,
-                                '.%')
-                                OR c.path LIKE CONCAT('%.',
-                                a.id)
-                                OR c.path LIKE CONCAT(a.id,
-                                '.%')
-                                OR c.path = a.id)
-                            WHERE
-                                is_standard = 1
-                                AND is_selectable = 1
-                            )
-                    )
-                ) measurement")
-
-  query <- str_glue("
+  # BMI
+  bmi_query <- str_glue("
         SELECT
             measurement.person_id,
             measurement.measurement_date,
@@ -104,6 +60,7 @@ closest_bmi <-  function(dataset,output_folder,anchor_date_table=NULL,before=NUL
                             )
                     )
                 ) measurement")
+
 
   # Height
   height_query <- str_glue("
@@ -149,10 +106,7 @@ closest_bmi <-  function(dataset,output_folder,anchor_date_table=NULL,before=NUL
                                 AND is_selectable = 1
                             )
                     )
-                ) measurement
-            LEFT JOIN
-                `{dataset}.concept` m_unit
-                    ON measurement.unit_concept_id = m_unit.concept_id")
+                ) measurement")
 
   # Weight
   weight_query <- str_glue("
@@ -198,14 +152,11 @@ closest_bmi <-  function(dataset,output_folder,anchor_date_table=NULL,before=NUL
                                 AND is_selectable = 1
                             )
                     )
-                ) measurement
-                LEFT JOIN
-                `{dataset}.concept` m_unit
-                    ON measurement.unit_concept_id = m_unit.concept_id")
+                ) measurement")
 
 
   # BMI
-  result_bmi <- download_data(query)
+  result_bmi <- download_data(bmi_query)
   result_bmi <- as.data.table(merge(result_bmi,anchor_date_table,by="person_id",allow.cartesian=TRUE))
   result_bmi[,min_window_date := anchor_date + before]
   result_bmi[,max_window_date := anchor_date + after]
@@ -226,7 +177,7 @@ closest_bmi <-  function(dataset,output_folder,anchor_date_table=NULL,before=NUL
 
   # Weight
   bq_table_save(
-    bq_dataset_query(dataset, query, billing = Sys.getenv("GOOGLE_PROJECT")),
+    bq_dataset_query(dataset, weight_query, billing = Sys.getenv("GOOGLE_PROJECT")),
     paste0(output_folder,"/aou_phenotyper/weight_*.csv"),
     destination_format = "CSV")
   result_weight <- as.data.table(read_bucket(str_glue("{output_folder}/aou_phenotyper/weight_*.csv")))
