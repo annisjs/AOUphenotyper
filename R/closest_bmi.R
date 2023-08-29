@@ -162,6 +162,7 @@ closest_bmi <-  function(dataset,output_folder,anchor_date_table=NULL,before=NUL
   result_bmi[,max_window_date := anchor_date + after]
   result_bmi <- result_bmi[measurement_date >= min_window_date]
   result_bmi <- result_bmi[measurement_date <= max_window_date]
+  result_bmi <- result_bmi[,c("person_id","measurement_date","bmi")]
 
   # Height
   bq_table_save(
