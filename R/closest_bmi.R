@@ -194,6 +194,7 @@ closest_bmi <-  function(dataset,output_folder,anchor_date_table=NULL,before=NUL
   result_hw <- result_hw[,c("person_id","measurement_date","bmi")]
 
   result_all <- rbind(result_bmi,result_hw)
+  result_all <- merge(result_all,anchor_date_table,by="person_id",allow.cartesian=TRUE)
 
   result_all[,diff := abs(as.numeric(as.Date(measurement_date) - as.Date(anchor_date)))]
   result_all <- result_all[order(diff)]
