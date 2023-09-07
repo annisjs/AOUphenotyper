@@ -19,7 +19,7 @@ last_asleep <- function(dataset,output_folder,anchor_date_table=NULL,before=NULL
         FROM (SELECT person_id, sleep_date, start_datetime, duration_in_min, is_main_sleep,
                row_number() over(partition by person_id, sleep_date order by start_datetime desc) as rn
                 FROM sleep_level
-                WHERE level = 'asleep' AND is_main_sleep = 'true') as t1
+                WHERE is_main_sleep = 'true') as t1
         WHERE rn = 1",sep="")
   bq_table_save(
     bq_dataset_query(dataset, query, billing = Sys.getenv("GOOGLE_PROJECT")),
