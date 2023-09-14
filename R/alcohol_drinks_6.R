@@ -34,7 +34,7 @@ alcohol_drinks_6 <- function(dataset,output_folder,anchor_date_table=NULL,before
     result <- result[alcohol_drinks_6_entry_date <= max_window_date]
   }
   result <- result[,c("person_id","alcohol_drinks_6_entry_date","alcohol_drinks_6_status")]
-  fwrite(result,file="alcohol.csv")
+  fwrite(result,file="alcohol_drinks_6.csv")
   system(str_glue("gsutil cp alcohol_drinks_6.csv {output_folder}/alcohol_drinks_6.csv"),intern=TRUE)
 }
 
