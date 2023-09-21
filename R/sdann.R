@@ -50,6 +50,6 @@ sdann <- function(dataset,output_folder,anchor_date_table=NULL,before=NULL,after
     result <- result[,c("person_id","sdann_date","sdann_value","sdann_total_valid_interval")]
   }
   fwrite(result,file="sdann.csv")
-  system(str_glue("gsutil cp sdann.csv {output_folder}/sdann_.csv"),intern=TRUE)
+  system(str_glue("gsutil cp sdann.csv {output_folder}/sdann.csv"),intern=TRUE)
   system(str_glue("gsutil rm {output_folder}/aou_phenotyper/*"),intern=TRUE)
 }
