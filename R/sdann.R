@@ -18,7 +18,7 @@ sdann <- function(dataset,output_folder,anchor_date_table=NULL,before=NULL,after
     SELECT person_id,
            sdann_date,
            STDDEV(avg_rr) AS sdann_value,
-           SUM(valid_interval) AS sdan_total_valid_interval
+           SUM(valid_interval) AS sdann_total_valid_interval
     FROM (SELECT
             person_id,
             CAST(datetime AS DATE) AS sdann_date,
