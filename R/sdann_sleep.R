@@ -58,10 +58,10 @@ sdann_sleep <- function(dataset,output_folder,anchor_date_table=NULL,before=NULL
                    INNER JOIN {dataset}.heart_rate_minute_level AS h ON (h.person_id = fa.person_id AND
                                            h.datetime BETWEEN sleep_start_datetime AND sleep_end_datetime)
         )
-        GROUP BY person_id, sdann_date, minute_interval
+        GROUP BY person_id, sdann_sleep_date, minute_interval
         HAVING valid_interval = 1
     )
-    GROUP BY person_id, sdann_date
+    GROUP BY person_id, sdann_sleep_date
     ")
   bq_table_save(
     bq_dataset_query(dataset, query, billing = Sys.getenv("GOOGLE_PROJECT")),
