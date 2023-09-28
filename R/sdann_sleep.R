@@ -21,7 +21,7 @@ sdann_sleep <- function(dataset,output_folder,anchor_date_table=NULL,before=NULL
            SUM(valid_interval) AS sdann_sleep_total_valid_interval
     FROM (SELECT
             person_id,
-            CAST(datetime AS DATE) AS sdann_sleep_date,
+            sleep_date AS sdann_sleep_date,
             6000 / AVG(heart_rate_value) AS avg_rr,
             IF(COUNT(*)=5,1,0) AS valid_interval
         FROM (WITH
@@ -49,7 +49,7 @@ sdann_sleep <- function(dataset,output_folder,anchor_date_table=NULL,before=NULL
                     WHERE rn = 1
                 )
              SELECT h.person_id,
-                    datetime,
+                    la.sleep_date,
                     heart_rate_value,
                     FLOOR((EXTRACT(MINUTE FROM datetime) +
                                 60 * EXTRACT(HOUR FROM datetime)) / 5) AS minute_interval
