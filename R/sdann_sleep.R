@@ -56,6 +56,8 @@ sdann_sleep <- function(dataset,output_folder,anchor_date_table=NULL,before=NULL
               FROM last_asleep la
                    INNER JOIN first_asleep fa ON (la.person_id = fa.person_id AND la.sleep_date = fa.sleep_date)
                    INNER JOIN {dataset}.heart_rate_minute_level AS h ON (h.person_id = fa.person_id AND
+                                          (CAST(h.datetime AS DATE) = CAST(sleep_start_datetime AS DATE) OR
+                                           CAST(h.datetime AS DATE) = CAST(sleep_end_datetime AS DATE)) AND
                                            h.datetime BETWEEN sleep_start_datetime AND sleep_end_datetime)
         )
         GROUP BY person_id, sdann_sleep_date, minute_interval
