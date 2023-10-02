@@ -44,6 +44,7 @@ all_mi_hospitalizations <- function(dataset,output_folder,anchor_date_table=NULL
     result <- result[all_mi_hospitalizations_entry_date <= max_window_date]
   }
   result <- result[,c("person_id","all_mi_hospitalizations_entry_date")]
+  result <- result[!duplicated(result)]
   fwrite(result,file="all_mi_hospitalizations.csv")
   system(str_glue("gsutil cp all_mi_hospitalizations.csv {output_folder}/all_mi_hospitalizations.csv"),intern=TRUE)
   system(str_glue("gsutil rm {output_folder}/aou_phenotyper/*"),intern=TRUE)
