@@ -11,25 +11,17 @@ all_hf_hospitalizations <- function(dataset,output_folder,anchor_date_table=NULL
 {
   query <- str_glue("
       SELECT  co.person_id,
-              vo.visit_start_date AS all_hf_hospitalizations_entry_date,
-              vo.visit_end_date AS all_hf_hospitalizations_end_date,
-              co.condition_source_value AS all_hf_hospitalizations_icd_code,
-              c2.concept_name AS all_hf_hospitalizations_dx_type
+              vo.visit_start_date AS all_hf_hospitalizations_entry_date
       FROM
           `{dataset}.condition_occurrence` co
-          LEFT JOIN
-          `{dataset}.concept` c
-          ON (co.condition_source_concept_id = c.concept_id)
-          LEFT JOIN
-          `{dataset}.concept` c2
-          ON (co.condition_type_concept_id = c2.concept_id)
-          LEFT JOIN
-          `{dataset}.visit_occurrence` vo
-          ON (co.visit_occurrence_id = vo.visit_occurrence_id)
+          LEFT JOIN `{dataset}`.concept c ON (co.condition_source_concept_id = c.concept_id)
+          LEFT JOIN `{dataset}.visit_occurrence` vo ON (co.visit_occurrence_id = vo.visit_occurrence_id)
       WHERE
           c.VOCABULARY_ID LIKE 'ICD%' AND
-          (vo.visit_concept_id = 9201 OR vo.visit_concept_id = 9203) OR
-          co.condition_type_concept_id = 38000200 AND
+          (
+             vo.visit_concept_id = 9201 AND
+             (co.condition_type_concept_id = 38000200 OR co.condition_status_concept_id = 4230359)
+          ) AND
           (co.condition_source_value LIKE '425' OR
           co.condition_source_value LIKE '425.%' OR
           co.condition_source_value LIKE '428' OR
