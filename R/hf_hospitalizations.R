@@ -11,21 +11,11 @@ hf_hospitalization <- function(dataset,output_folder,anchor_date_table=NULL,befo
 {
   query <- str_glue("
       SELECT  co.person_id,
-              vo.visit_start_date AS hf_hospitalization_entry_date,
-              vo.visit_end_date AS hf_hospitalization_end_date,
-              co.condition_source_value AS hf_hospitalization_icd_code,
-              c2.concept_name AS hf_hospitalization_dx_type
+              vo.visit_start_date AS hf_hospitalization_entry_date
       FROM
           `{dataset}.condition_occurrence` co
-          LEFT JOIN
-          `{dataset}.concept` c
-          ON (co.condition_source_concept_id = c.concept_id)
-          LEFT JOIN
-          `{dataset}.concept` c2
-          ON (co.condition_type_concept_id = c2.concept_id)
-          LEFT JOIN
-          `{dataset}.visit_occurrence` vo
-          ON (co.visit_occurrence_id = vo.visit_occurrence_id)
+          LEFT JOIN `{dataset}.concept` c ON (co.condition_source_concept_id = c.concept_id)
+          LEFT JOIN `{dataset}.visit_occurrence` vo ON (co.visit_occurrence_id = vo.visit_occurrence_id)
       WHERE
           c.VOCABULARY_ID LIKE 'ICD%' AND
           (vo.visit_concept_id = 9201 OR vo.visit_concept_id = 9203) OR
@@ -53,8 +43,9 @@ hf_hospitalization <- function(dataset,output_folder,anchor_date_table=NULL,befo
     result <- result[hf_hospitalization_entry_date >= min_window_date]
     result <- result[hf_hospitalization_entry_date <= max_window_date]
   }
-  result <- result[,c("person_id","hf_hospitalization_entry_date","hf_hospitalization_end_date",
-                      "hf_hospitalization_icd_code","hf_hospitalization_dx_type")]
+  result <- result[order(hf_hospitalization_entry_date)]
+  result <- result[,.(hf_hospitalization_entry_date = hf_hospitalization_entry_date[1]), .(person_id)]
+  result[, hf_hospitalization_status := !is.na(hf_hospitalization_entry_date)]
   fwrite(result,file="hf_hospitalization.csv")
   system(str_glue("gsutil cp hf_hospitalization.csv {output_folder}/hf_hospitalization.csv"),intern=TRUE)
   system(str_glue("gsutil rm {output_folder}/aou_phenotyper/*"),intern=TRUE)
