@@ -58,6 +58,7 @@ format_fitbit_sleep_and_activity_cox <- function(sleep_pa,dx,last_medical_encoun
                                                     baseline_pct_deep = mean((minute_deep / minute_asleep) * 100,na.rm=T),
                                                     baseline_efficiency = mean(efficiency,na.rm=T),
                                                     baseline_steps = mean(steps),
+                                                    baseline_sd_minute_asleep = sd(minute_asleep,na.rm=T),
                                                     count = length(date)),.(person_id)]
   merged_cox_baseline_agg <- merged_cox_baseline_agg[count >= 15]
 
@@ -102,6 +103,7 @@ format_fitbit_sleep_and_activity_cox <- function(sleep_pa,dx,last_medical_encoun
                                   mean_pct_light = mean((minute_light / minute_asleep) * 100,na.rm=T),
                                   mean_efficiency = mean(efficiency,na.rm=T),
                                   mean_steps = mean(steps,na.rm=T),
+                                  sd_minute_asleep = sd(minute_asleep,na.rm=T),
                                   baseline_minute10_rem = baseline_minute10_rem[1],
                                   baseline_minute10_deep = baseline_minute10_deep[1],
                                   baseline_hour_light = baseline_hour_light[1],
@@ -142,6 +144,7 @@ format_fitbit_sleep_and_activity_cox <- function(sleep_pa,dx,last_medical_encoun
                                       mean_pct_deep = mean_pct_deep,
                                       mean_pct_light = mean_pct_light,
                                       mean_efficiency = mean_efficiency,
+                                      sd_minute_asleep = sd_minute_asleep,
                                       mean_steps = mean_steps,
                                       baseline_hour_asleep = baseline_hour_asleep,
                                       baseline_minute10_rem = baseline_minute10_rem,
