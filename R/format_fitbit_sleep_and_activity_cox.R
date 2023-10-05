@@ -155,7 +155,8 @@ format_fitbit_sleep_and_activity_cox <- function(sleep_pa,dx,last_medical_encoun
                                       baseline_pct_deep = baseline_pct_deep,
                                       baseline_pct_light = baseline_pct_light,
                                       baseline_efficiency = baseline_efficiency,
-                                      baseline_steps = baseline_steps),
+                                      baseline_steps = baseline_steps,
+                                      baseline_sd_minute_asleep = baseline_sd_minute_asleep),
                                    by=.(person_id)]
 
   # Do a little tidying to keep those with a single month as a single row.
