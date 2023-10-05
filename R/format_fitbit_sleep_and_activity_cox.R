@@ -113,6 +113,7 @@ format_fitbit_sleep_and_activity_cox <- function(sleep_pa,dx,last_medical_encoun
                                   baseline_pct_deep = baseline_pct_deep[1],
                                   baseline_efficiency = baseline_efficiency[1],
                                   baseline_steps = baseline_steps[1],
+                                  baseline_sd_minute_asleep = baseline_sd_minute_asleep[1],
                                   count = length(hour_asleep)),.(person_id,time1,time2)]
   merged_cox_agg <- merged_cox_agg[order(merged_cox_agg$time1,decreasing=FALSE)]
   merged_cox_agg <- merged_cox_agg[!is.na(mean_minute10_rem)]
