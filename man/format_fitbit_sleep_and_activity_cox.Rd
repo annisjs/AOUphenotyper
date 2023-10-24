@@ -4,7 +4,12 @@
 \alias{format_fitbit_sleep_and_activity_cox}
 \title{Format Fitbit activity and sleep data for time varying Cox model}
 \usage{
-format_fitbit_sleep_and_activity_cox(sleep_pa, dx, last_medical_encounter)
+format_fitbit_sleep_and_activity_cox(
+  sleep_pa,
+  dx,
+  last_medical_encounter,
+  cull_list
+)
 }
 \arguments{
 \item{sleep_pa}{data.table with columns: person_id, date, minute_asleep, minute_rem, minute_deep, minute_light, minute_in_bed, steps}
@@ -12,6 +17,8 @@ format_fitbit_sleep_and_activity_cox(sleep_pa, dx, last_medical_encounter)
 \item{dx}{data.table with columns: person_id, dx_entry_date, dx_status}
 
 \item{last_medical_encounter}{data.table with columns: person_id, last_medical_encounter_entry_date}
+
+\item{cull_list}{a character vector containing variables to perform exclusions on with months less than 15 days of observations.}
 }
 \value{
 A data.table

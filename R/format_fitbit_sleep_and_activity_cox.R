@@ -65,8 +65,44 @@ format_fitbit_sleep_and_activity_cox <- function(sleep_pa,dx,last_medical_encoun
                                                     baseline_pct_restless = mean(pct_restless,na.rm=T),
                                                     baseline_steps = mean(steps),
                                                     baseline_sd_minute_asleep = sd(minute_asleep,na.rm=T),
-                                                    count = length(date)),.(person_id)]
-  merged_cox_baseline_agg <- merged_cox_baseline_agg[count >= 15]
+                                                    count = length(date),
+                                                    baseline_minute_asleep_count = length(which(!is.na(minute_asleep))),
+                                                    baseline_minute_restless_count = length(which(!is.na(minute_restless))),
+                                                    baseline_minute_deep_count = length(which(!is.na(minute_deep))),
+                                                    baseline_minute_light_count = length(which(!is.na(minute_light))),
+                                                    baseline_minute_rem_count = length(which(!is.na(minute_rem))),
+                                                    baseline_minute_awake_count = length(which(!is.na(minute_awake)))),
+                                                 .(person_id)]
+
+  if ("minute_asleep" %in% cull_list)
+  {
+    merged_cox_baseline_agg <- merged_cox_baseline_agg[baseline_minute_asleep_count >= 15]
+  }
+
+  if ("minute_restless" %in% cull_list)
+  {
+    merged_cox_baseline_agg <- merged_cox_baseline_agg[baseline_minute_restless_count >= 15]
+  }
+
+  if ("minute_deep" %in% cull_list)
+  {
+    merged_cox_baseline_agg <- merged_cox_baseline_agg[baseline_minute_deep_count >= 15]
+  }
+
+  if ("minute_light" %in% cull_list)
+  {
+    merged_cox_baseline_agg <- merged_cox_baseline_agg[baseline_minute_light_count >= 15]
+  }
+
+  if ("minute_rem" %in% cull_list)
+  {
+    merged_cox_baseline_agg <- merged_cox_baseline_agg[baseline_minute_rem_count >= 15]
+  }
+
+  if ("minute_awake" %in% cull_list)
+  {
+    merged_cox_baseline_agg <- merged_cox_baseline_agg[baseline_minute_awake_count >= 15]
+  }
 
   cat("\n")
   cat("\nExcluding months with < 15 days in the baseline period.")
