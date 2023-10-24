@@ -3,12 +3,12 @@
 #' @param sleep_pa data.table with columns: person_id, date, minute_asleep, minute_rem, minute_deep, minute_light, minute_in_bed, steps
 #' @param dx data.table with columns: person_id, dx_entry_date, dx_status
 #' @param last_medical_encounter data.table with columns: person_id, last_medical_encounter_entry_date
-#'
+#' @param cull_list a character vector containing variables to perform exclusions on with months less than 15 days of observations.
 #' @return A data.table
 #' @import data.table
 #' @export
 #'
-format_fitbit_sleep_and_activity_cox <- function(sleep_pa,dx,last_medical_encounter)
+format_fitbit_sleep_and_activity_cox <- function(sleep_pa,dx,last_medical_encounter,cull_list)
 {
   sleep_pa[,hour_asleep := minute_asleep / 60]
   sleep_pa[,hour_light := minute_light / 60]
@@ -87,17 +87,41 @@ format_fitbit_sleep_and_activity_cox <- function(sleep_pa,dx,last_medical_encoun
   cat("\nMonths remaining: ",nrow(init_months[count >= 15]))
   cat("\nPercentage removed: ",round(nrow(init_months[count < 15]) / nrow(init_months),3) * 100, "%")
 
-  merged_cox[,count := length(hour_asleep),.(person_id,time1,time2)]
-  merged_cox <- merged_cox[count >= 15]
+  if ("minute_asleep" %in% cull_list)
+  {
+    merged_cox[,count := length(minute_asleep),.(person_id,time1,time2)]
+    merged_cox <- merged_cox[count >= 15]
+  }
 
-  merged_cox[,count := length(minute_rem),.(person_id,time1,time2)]
-  merged_cox <- merged_cox[count >= 15]
+  if ("minute_rem" %in% cull_list)
+  {
+    merged_cox[,count := length(minute_rem),.(person_id,time1,time2)]
+    merged_cox <- merged_cox[count >= 15]
+  }
 
-  merged_cox[,count := length(minute_deep),.(person_id,time1,time2)]
-  merged_cox <- merged_cox[count >= 15]
+  if ("minute_deep" %in% cull_list)
+  {
+    merged_cox[,count := length(minute_deep),.(person_id,time1,time2)]
+    merged_cox <- merged_cox[count >= 15]
+  }
 
-  merged_cox[,count := length(minute_light),.(person_id,time1,time2)]
-  merged_cox <- merged_cox[count >= 15]
+  if ("minute_light" %in% cull_list)
+  {
+    merged_cox[,count := length(minute_light),.(person_id,time1,time2)]
+    merged_cox <- merged_cox[count >= 15]
+  }
+
+  if ("minute_restless" %in% cull_list)
+  {
+    merged_cox[,count := length(minute_restless),.(person_id,time1,time2)]
+    merged_cox <- merged_cox[count >= 15]
+  }
+
+  if ("minute_awake" %in% cull_list)
+  {
+    merged_cox[,count := length(minute_restless),.(person_id,time1,time2)]
+    merged_cox <- merged_cox[count >= 15]
+  }
 
   #aggregate steps by month
   merged_cox_agg <- merged_cox[,.(mean_hour_asleep = mean(hour_asleep,na.rm=T),
