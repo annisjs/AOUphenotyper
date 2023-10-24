@@ -4,11 +4,12 @@
 #' @param dx data.table with columns: person_id, dx_entry_date, dx_status
 #' @param last_medical_encounter data.table with columns: person_id, last_medical_encounter_entry_date
 #' @param cull_list a character vector containing variables to perform exclusions on with months less than 15 days of observations.
+#' @param cull_baseline should there be at least 15 observations in the baseline monitoring period?
 #' @return A data.table
 #' @import data.table
 #' @export
 #'
-format_fitbit_sleep_and_activity_cox <- function(sleep_pa,dx,last_medical_encounter,cull_list)
+format_fitbit_sleep_and_activity_cox <- function(sleep_pa,dx,last_medical_encounter,cull_list,cull_baseline=TRUE)
 {
   sleep_pa[,hour_asleep := minute_asleep / 60]
   sleep_pa[,hour_light := minute_light / 60]
@@ -74,34 +75,37 @@ format_fitbit_sleep_and_activity_cox <- function(sleep_pa,dx,last_medical_encoun
                                                     baseline_minute_awake_count = length(which(!is.na(minute_awake)))),
                                                  .(person_id)]
 
-  if ("minute_asleep" %in% cull_list)
+  if (cull_baseline)
   {
-    merged_cox_baseline_agg <- merged_cox_baseline_agg[baseline_minute_asleep_count >= 15]
-  }
+    if ("minute_asleep" %in% cull_list)
+    {
+      merged_cox_baseline_agg <- merged_cox_baseline_agg[baseline_minute_asleep_count >= 15]
+    }
 
-  if ("minute_restless" %in% cull_list)
-  {
-    merged_cox_baseline_agg <- merged_cox_baseline_agg[baseline_minute_restless_count >= 15]
-  }
+    if ("minute_restless" %in% cull_list)
+    {
+      merged_cox_baseline_agg <- merged_cox_baseline_agg[baseline_minute_restless_count >= 15]
+    }
 
-  if ("minute_deep" %in% cull_list)
-  {
-    merged_cox_baseline_agg <- merged_cox_baseline_agg[baseline_minute_deep_count >= 15]
-  }
+    if ("minute_deep" %in% cull_list)
+    {
+      merged_cox_baseline_agg <- merged_cox_baseline_agg[baseline_minute_deep_count >= 15]
+    }
 
-  if ("minute_light" %in% cull_list)
-  {
-    merged_cox_baseline_agg <- merged_cox_baseline_agg[baseline_minute_light_count >= 15]
-  }
+    if ("minute_light" %in% cull_list)
+    {
+      merged_cox_baseline_agg <- merged_cox_baseline_agg[baseline_minute_light_count >= 15]
+    }
 
-  if ("minute_rem" %in% cull_list)
-  {
-    merged_cox_baseline_agg <- merged_cox_baseline_agg[baseline_minute_rem_count >= 15]
-  }
+    if ("minute_rem" %in% cull_list)
+    {
+      merged_cox_baseline_agg <- merged_cox_baseline_agg[baseline_minute_rem_count >= 15]
+    }
 
-  if ("minute_awake" %in% cull_list)
-  {
-    merged_cox_baseline_agg <- merged_cox_baseline_agg[baseline_minute_awake_count >= 15]
+    if ("minute_awake" %in% cull_list)
+    {
+      merged_cox_baseline_agg <- merged_cox_baseline_agg[baseline_minute_awake_count >= 15]
+    }
   }
 
   cat("\n")
