@@ -119,7 +119,7 @@ format_fitbit_sleep_and_activity_cox <- function(sleep_pa,dx,last_medical_encoun
 
   if ("minute_awake" %in% cull_list)
   {
-    merged_cox[,count := length(minute_restless),.(person_id,time1,time2)]
+    merged_cox[,count := length(minute_awake),.(person_id,time1,time2)]
     merged_cox <- merged_cox[count >= 15]
   }
 
