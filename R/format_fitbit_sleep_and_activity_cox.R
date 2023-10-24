@@ -77,48 +77,106 @@ format_fitbit_sleep_and_activity_cox <- function(sleep_pa,dx,last_medical_encoun
   cat("\n")
   cat("\nAnalysis switching to months…")
 
-  init_months <- merged_cox[,.(count = length(hour_asleep)),.(person_id,time1,time2)]
-  cat("\nN:",length(unique(merged_cox$person_id)))
-  cat("\nMonths: ", nrow(init_months))
-
-  cat("\n")
-  cat("\nRemoving months with less than 15 days of observations:")
-  cat("\nMonths removed: ",nrow(init_months[count < 15]))
-  cat("\nMonths remaining: ",nrow(init_months[count >= 15]))
-  cat("\nPercentage removed: ",round(nrow(init_months[count < 15]) / nrow(init_months),3) * 100, "%")
 
   if ("minute_asleep" %in% cull_list)
   {
+    cat("\nExcluding months with < 15 days of minute_asleep observations")
+    init_months <- merged_cox[,.(count = length(which(!is.na(minute_asleep)))),.(person_id,time1,time2)]
+    cat("\nN:",length(unique(merged_cox$person_id)))
+    cat("\nMonths: ", nrow(init_months))
+
+    cat("\n")
+    cat("\nRemoving months with less than 15 days of observations:")
+    cat("\nMonths removed: ",nrow(init_months[count < 15]))
+    cat("\nMonths remaining: ",nrow(init_months[count >= 15]))
+    cat("\nPercentage removed: ",round(nrow(init_months[count < 15]) / nrow(init_months),3) * 100, "%")
+
     merged_cox[,count := length(which(!is.na(minute_asleep))),.(person_id,time1,time2)]
     merged_cox <- merged_cox[count >= 15]
   }
 
   if ("minute_rem" %in% cull_list)
   {
+    cat("\nExcluding months with < 15 days of minute_rem observations")
+    init_months <- merged_cox[,.(count = length(which(!is.na(minute_rem)))),.(person_id,time1,time2)]
+    cat("\nN:",length(unique(merged_cox$person_id)))
+    cat("\nMonths: ", nrow(init_months))
+
+    cat("\n")
+    cat("\nRemoving months with less than 15 days of observations:")
+    cat("\nMonths removed: ",nrow(init_months[count < 15]))
+    cat("\nMonths remaining: ",nrow(init_months[count >= 15]))
+    cat("\nPercentage removed: ",round(nrow(init_months[count < 15]) / nrow(init_months),3) * 100, "%")
+
     merged_cox[,count := length(which(!is.na(minute_rem))),.(person_id,time1,time2)]
     merged_cox <- merged_cox[count >= 15]
   }
 
   if ("minute_deep" %in% cull_list)
   {
+    cat("\nExcluding months with < 15 days of minute_deep observations")
+    init_months <- merged_cox[,.(count = length(which(!is.na(minute_deep)))),.(person_id,time1,time2)]
+    cat("\nN:",length(unique(merged_cox$person_id)))
+    cat("\nMonths: ", nrow(init_months))
+
+    cat("\n")
+    cat("\nRemoving months with less than 15 days of observations:")
+    cat("\nMonths removed: ",nrow(init_months[count < 15]))
+    cat("\nMonths remaining: ",nrow(init_months[count >= 15]))
+    cat("\nPercentage removed: ",round(nrow(init_months[count < 15]) / nrow(init_months),3) * 100, "%")
+
     merged_cox[,count := length(which(!is.na(minute_deep))),.(person_id,time1,time2)]
     merged_cox <- merged_cox[count >= 15]
   }
 
   if ("minute_light" %in% cull_list)
   {
+    cat("\nExcluding months with < 15 days of minute_light observations")
+    init_months <- merged_cox[,.(count = length(which(!is.na(minute_light)))),.(person_id,time1,time2)]
+    cat("\nN:",length(unique(merged_cox$person_id)))
+    cat("\nMonths: ", nrow(init_months))
+
+    cat("\n")
+    cat("\nRemoving months with less than 15 days of observations:")
+    cat("\nMonths removed: ",nrow(init_months[count < 15]))
+    cat("\nMonths remaining: ",nrow(init_months[count >= 15]))
+    cat("\nPercentage removed: ",round(nrow(init_months[count < 15]) / nrow(init_months),3) * 100, "%")
+
     merged_cox[,count := length(which(!is.na(minute_light))),.(person_id,time1,time2)]
     merged_cox <- merged_cox[count >= 15]
   }
 
   if ("minute_restless" %in% cull_list)
   {
+    cat("\nExcluding months with < 15 days of minute_restless observations")
+    init_months <- merged_cox[,.(count = length(which(!is.na(minute_restless)))),.(person_id,time1,time2)]
+    cat("\nN:",length(unique(merged_cox$person_id)))
+    cat("\nMonths: ", nrow(init_months))
+
+    cat("\n")
+    cat("\nRemoving months with less than 15 days of observations:")
+    cat("\nMonths removed: ",nrow(init_months[count < 15]))
+    cat("\nMonths remaining: ",nrow(init_months[count >= 15]))
+    cat("\nPercentage removed: ",round(nrow(init_months[count < 15]) / nrow(init_months),3) * 100, "%")
+
     merged_cox[,count := length(which(!is.na(minute_restless))),.(person_id,time1,time2)]
     merged_cox <- merged_cox[count >= 15]
   }
 
   if ("minute_awake" %in% cull_list)
   {
+
+    cat("\nExcluding months with < 15 days of minute_restless observations")
+    init_months <- merged_cox[,.(count = length(which(!is.na(minute_awake)))),.(person_id,time1,time2)]
+    cat("\nN:",length(unique(merged_cox$person_id)))
+    cat("\nMonths: ", nrow(init_months))
+
+    cat("\n")
+    cat("\nRemoving months with less than 15 days of observations:")
+    cat("\nMonths removed: ",nrow(init_months[count < 15]))
+    cat("\nMonths remaining: ",nrow(init_months[count >= 15]))
+    cat("\nPercentage removed: ",round(nrow(init_months[count < 15]) / nrow(init_months),3) * 100, "%")
+
     merged_cox[,count := length(which(!is.na(minute_awake))),.(person_id,time1,time2)]
     merged_cox <- merged_cox[count >= 15]
   }
