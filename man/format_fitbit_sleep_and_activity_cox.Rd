@@ -8,7 +8,8 @@ format_fitbit_sleep_and_activity_cox(
   sleep_pa,
   dx,
   last_medical_encounter,
-  cull_list
+  cull_list,
+  cull_baseline = TRUE
 )
 }
 \arguments{
@@ -19,6 +20,8 @@ format_fitbit_sleep_and_activity_cox(
 \item{last_medical_encounter}{data.table with columns: person_id, last_medical_encounter_entry_date}
 
 \item{cull_list}{a character vector containing variables to perform exclusions on with months less than 15 days of observations.}
+
+\item{cull_baseline}{should there be at least 15 observations in the baseline monitoring period?}
 }
 \value{
 A data.table
