@@ -175,6 +175,7 @@ closest_bmi <-  function(dataset,output_folder,anchor_date_table=NULL,before=NUL
   result_height[,max_window_date := anchor_date + after]
   result_height <- result_height[measurement_date >= min_window_date]
   result_height <- result_height[measurement_date <= max_window_date]
+  result_height <- result_height[!duplicated(result_height)]
 
   # Weight
   bq_table_save(
@@ -187,9 +188,10 @@ closest_bmi <-  function(dataset,output_folder,anchor_date_table=NULL,before=NUL
   result_weight[,max_window_date := anchor_date + after]
   result_weight <- result_weight[measurement_date >= min_window_date]
   result_weight <- result_weight[measurement_date <= max_window_date]
+  result_weight <- result_weight[!duplicated(result_weight)]
 
   # Compute BMI from height and weight
-  result_hw <- merge(result_height,result_weight,by=c("person_id","measurement_date"))
+  result_hw <- merge(result_height,result_weight,by=c("person_id","measurement_date"),allow.cartesian=TRUE)
   result_hw[, bmi := weight / (height/100)^2]
   result_hw <- result_hw[,c("person_id","measurement_date","bmi")]
 
