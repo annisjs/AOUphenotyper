@@ -66,7 +66,7 @@ all_bmi <-  function(dataset,output_folder,anchor_date_table=NULL,before=NULL,af
     result_bmi <- result_bmi[all_bmi_date <= max_window_date]
     result_bmi <- result_bmi[,c("person_id","all_bmi_entry_date","all_bmi_value")]
   }
-  fwrite(result_all,file="all_bmi.csv")
+  fwrite(result_bmi,file="all_bmi.csv")
   system(str_glue("gsutil cp all_bmi.csv {output_folder}/all_bmi.csv"),intern=TRUE)
 
 }
