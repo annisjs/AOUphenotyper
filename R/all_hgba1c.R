@@ -27,7 +27,7 @@ all_hgba1c <- function(dataset,output_folder,anchor_date_table=NULL,before=NULL,
                                     "Hemoglobin A1c/Hemoglobin.total in Blood by IFCC protocol",
                                     "Hemoglobin A1c/Hemoglobin.total in Blood",
                                     "Hemoglobin A1c/Hemoglobin.total in Blood by HPLC"))
-  if (is.null(anchor_date_table))
+  if (!is.null(anchor_date_table))
   {
     result_all <- as.data.table(merge(result_all,anchor_date_table,by="person_id"))
     result_all[,min_window_date := anchor_date + before]

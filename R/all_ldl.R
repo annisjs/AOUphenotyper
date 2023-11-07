@@ -22,7 +22,7 @@ all_ldl <- function(dataset,output_folder,anchor_date_table=NULL,before=NULL,aft
                                     "Cholesterol in LDL [Mass/volume] in Serum or Plasma",
                                     "Cholesterol in LDL [Mass/volume] in Serum or Plasma by Direct assay",
                                     "Cholesterol in LDL [Mass/volume] in Serum or Plasma by Electrophoresis"))
-  if (is.null(anchor_date_table))
+  if (!is.null(anchor_date_table))
   {
     result_all <- as.data.table(merge(result_all,anchor_date_table,by="person_id"))
     result_all[,min_window_date := anchor_date + before]
