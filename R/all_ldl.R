@@ -31,7 +31,7 @@ all_ldl <- function(dataset,output_folder,anchor_date_table=NULL,before=NULL,aft
     result_all <- result_all[measurement_date <= max_window_date]
     result_all <- result_all[, c("person_id","measurement_date","value_as_number")]
   }
-  colnames(result_all) <- c("person_id","all_ldl_date","all_ldl_value")
+  colnames(result_all) <- c("person_id","all_ldl_entry_date","all_ldl_value")
   fwrite(result_all,file="all_ldl.csv")
   system(str_glue("gsutil cp all_ldl.csv {output_folder}/all_ldl.csv"),intern=TRUE)
 }

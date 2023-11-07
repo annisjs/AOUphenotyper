@@ -68,7 +68,7 @@ all_sbp <-  function(dataset,output_folder,anchor_date_table=NULL,before=NULL,af
     result_all <- result_all[measurement_date <= max_window_date]
     result_all <- result_all[, c("person_id","measurement_date","value_as_number")]
   }
-  colnames(result_all) <- c("person_id","all_sbp_date","all_sbp_value")
+  colnames(result_all) <- c("person_id","all_sbp_entry_date","all_sbp_value")
   fwrite(result_all,file="all_sbp.csv")
   system(str_glue("gsutil cp all_sbp.csv {output_folder}/all_sbp.csv"),intern=TRUE)
   system(str_glue("gsutil rm {output_folder}/aou_phenotyper/*"),intern=TRUE)

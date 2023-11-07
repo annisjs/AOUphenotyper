@@ -13,7 +13,7 @@ all_bmi <-  function(dataset,output_folder,anchor_date_table=NULL,before=NULL,af
   bmi_query <- str_glue("
         SELECT
             measurement.person_id,
-            measurement.measurement_date AS all_bmi_date,
+            measurement.measurement_date AS all_bmi_entry_date,
             measurement.value_as_number AS all_bmi_value
         FROM
             ( SELECT
@@ -64,9 +64,8 @@ all_bmi <-  function(dataset,output_folder,anchor_date_table=NULL,before=NULL,af
     result_bmi[,max_window_date := anchor_date + after]
     result_bmi <- result_bmi[all_bmi_date >= min_window_date]
     result_bmi <- result_bmi[all_bmi_date <= max_window_date]
-    result_bmi <- result_bmi[,c("person_id","all_bmi_date","all_bmi_value")]
+    result_bmi <- result_bmi[,c("person_id","all_bmi_entry_date","all_bmi_value")]
   }
-
   fwrite(result_all,file="all_bmi.csv")
   system(str_glue("gsutil cp all_bmi.csv {output_folder}/all_bmi.csv"),intern=TRUE)
 
