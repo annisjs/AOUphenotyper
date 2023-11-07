@@ -23,6 +23,7 @@ all_glucose <- function(dataset,output_folder,anchor_date_table=NULL,before=NULL
     result_all[,max_window_date := anchor_date + after]
     result_all <- result_all[measurement_date >= min_window_date]
     result_all <- result_all[measurement_date <= max_window_date]
+    result_all <- result_all[, c("person_id","measurement_date","value_as_number")]
   }
   colnames(result_all) <- c("person_id","all_glucose_date","all_glucose_value")
   fwrite(result_all,file="all_glucose.csv")
