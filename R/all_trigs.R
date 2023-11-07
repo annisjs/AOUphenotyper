@@ -14,10 +14,6 @@
 #' @export
 all_trigs <- function(dataset,output_folder,anchor_date_table=NULL,before=NULL,after=NULL)
 {
-  if (is.null(anchor_date_table))
-  {
-    stop("all_trigs is not a primary variable and requires an anchor date table.")
-  }
   result_all <- lab_query(dataset,c("Triglyceride [Mass/volume] in Serum or Plasma",
                                     "Triglyceride [Mass/volume] in Blood"))
   if (!is.null(anchor_date_table))
