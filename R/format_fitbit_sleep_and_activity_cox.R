@@ -149,7 +149,7 @@ format_fitbit_sleep_and_activity_cox <- function(sleep_pa,dx,last_medical_encoun
     cat("\nMonths remaining: ",nrow(init_months[count >= 15]))
     cat("\nPercentage removed: ",round(nrow(init_months[count < 15]) / nrow(init_months),3) * 100, "%")
 
-    merged_cox[,count := length(which(!is.na(minute_asleep))),.(person_id,time1,time2)]
+    merged_cox[,count := length(which(!is.na(steps))),.(person_id,time1,time2)]
     merged_cox <- merged_cox[count >= 15]
   }
 
