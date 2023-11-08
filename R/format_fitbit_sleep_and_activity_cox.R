@@ -252,8 +252,6 @@ format_fitbit_sleep_and_activity_cox <- function(sleep_pa,dx,last_medical_encoun
                                   baseline_pct_restless = baseline_pct_restless[1],
                                   count = length(hour_asleep)),.(person_id,time1,time2)]
   merged_cox_agg <- merged_cox_agg[order(merged_cox_agg$time1,decreasing=FALSE)]
-  merged_cox_agg <- merged_cox_agg[!is.na(mean_minute10_rem)]
-  merged_cox_agg <- merged_cox_agg[!is.na(mean_minute10_deep)]
 
   cat("\n")
   cat("\nFinal cohort size:")
