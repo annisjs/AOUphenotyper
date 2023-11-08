@@ -64,7 +64,7 @@ format_fitbit_sleep_and_activity_cox <- function(sleep_pa,dx,last_medical_encoun
                                                     baseline_minute_restless = mean(minute_restless, na.rm=T),
                                                     baseline_pct_awake = mean(pct_awake,na.rm=T),
                                                     baseline_pct_restless = mean(pct_restless,na.rm=T),
-                                                    baseline_steps = mean(steps),
+                                                    baseline_steps = mean(steps,na.rm=T),
                                                     baseline_sd_minute_asleep = sd(minute_asleep,na.rm=T),
                                                     count = length(date),
                                                     baseline_minute_asleep_count = length(which(!is.na(minute_asleep))),
