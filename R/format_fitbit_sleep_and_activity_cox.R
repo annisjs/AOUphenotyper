@@ -135,6 +135,24 @@ format_fitbit_sleep_and_activity_cox <- function(sleep_pa,dx,last_medical_encoun
     merged_cox <- merged_cox[count >= 15]
   }
 
+
+  if ("steps" %in% cull_list)
+  {
+    cat("\nExcluding months with < 15 days of steps observations")
+    init_months <- merged_cox[,.(count = length(which(!is.na(steps)))),.(person_id,time1,time2)]
+    cat("\nN:",length(unique(merged_cox$person_id)))
+    cat("\nMonths: ", nrow(init_months))
+
+    cat("\n")
+    cat("\nRemoving months with less than 15 days of observations:")
+    cat("\nMonths removed: ",nrow(init_months[count < 15]))
+    cat("\nMonths remaining: ",nrow(init_months[count >= 15]))
+    cat("\nPercentage removed: ",round(nrow(init_months[count < 15]) / nrow(init_months),3) * 100, "%")
+
+    merged_cox[,count := length(which(!is.na(minute_asleep))),.(person_id,time1,time2)]
+    merged_cox <- merged_cox[count >= 15]
+  }
+
   if ("minute_rem" %in% cull_list)
   {
     cat("\nExcluding months with < 15 days of minute_rem observations")
