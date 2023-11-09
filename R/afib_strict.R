@@ -30,10 +30,11 @@ afib_strict <- function(dataset,output_folder,anchor_date_table=NULL,before=NULL
                "33228","33229","33233","33234","33235","33236","33237","33238","33274","33275",
                "71090","93279","93280","93281","93286","93288","93293","93294","93731","93732","93733","93734","93735","93736")
   pace_cpt_dat <- cpt_query(dataset,pace_cpt)
+  pace_cpt_dat <- pace_cpt_dat[,c("person_id")]
+  pace_cpt_dat <- pace_cpt_dat[!duplicated(pace_cpt_dat)]
   pace_cpt_dat[, pacemaker_status := TRUE]
-  pace_cpt_dat <- pace_cpt_dat[,c("person_id","pacemaker_status")]
   result_all <- merge(result_all, pace_cpt_dat, by="person_id", all.x=TRUE)
-  result_all[, pacemaker_status := ifelse(is.na(pacemaker_status),FALSE,pacemaker_status)]
+  result_all[is.na(pacemaker_status), pacemaker_status := FALSE]
   result_all <- result_all[pacemaker_status == FALSE]
 
   if (!is.null(anchor_date_table))
