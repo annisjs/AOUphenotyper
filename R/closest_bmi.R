@@ -202,8 +202,6 @@ closest_bmi <-  function(dataset,output_folder,anchor_date_table=NULL,before=NUL
   result_all <- result_all[order(diff)]
   result_all <- result_all[,.(closest_bmi_entry_date = measurement_date[1],
                               closest_bmi_value = bmi[1]),.(person_id,anchor_date)]
-  result_all[,anchor_date := NULL]
-
   fwrite(result_all,file="closest_bmi.csv")
   system(str_glue("gsutil cp closest_bmi.csv {output_folder}/closest_bmi.csv"),intern=TRUE)
 

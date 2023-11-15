@@ -79,7 +79,7 @@ closest_weight <- function(dataset,output_folder,anchor_date_table=NULL,before=N
   result_all <- result_all[order(diff)]
   result_all <- result_all[,.(closest_weight_entry_date = measurement_date[1],
                               closest_weight_value = value_as_number[1],
-                              closest_weight_unit = unit_concept_name[1]),.(person_id)]
+                              closest_weight_unit = unit_concept_name[1]),.(person_id,anchor_date)]
   data.table::fwrite(result_all,file="closest_weight.csv")
   system(str_glue("gsutil cp closest_weight.csv {output_folder}/closest_weight.csv"),intern=TRUE)
   system(str_glue("gsutil rm {output_folder}/aou_phenotyper/*"),intern=TRUE)
