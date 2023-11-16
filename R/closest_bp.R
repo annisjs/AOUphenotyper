@@ -24,12 +24,12 @@ closest_bp <-  function(dataset,output_folder,anchor_date_table=NULL,before=NULL
             person_id, measurement_datetime, value_as_number AS bp_diastolic
             FROM `{dataset}.measurement` m
         WHERE
-            m.measurement_source_value IN ('8462-4','8453-3')),
+            m.measurement_source_value IN ('8462-4','8453-3', '271650006)),
         systb AS (SELECT
             person_id, measurement_datetime, value_as_number AS bp_systolic
             FROM `{dataset}.measurement` m
         WHERE
-            m.measurement_source_value IN ('8480-6','8459-0'))
+            m.measurement_source_value IN ('8480-6','8459-0','271649006'))
         SELECT c.person_id,
                CAST(d.measurement_datetime AS DATE) AS measurement_date,
                bp_systolic,
@@ -48,12 +48,12 @@ closest_bp <-  function(dataset,output_folder,anchor_date_table=NULL,before=NULL
             person_id, measurement_datetime, value_as_number AS bp_diastolic
             FROM `{dataset}.measurement` m
         WHERE
-            m.measurement_source_value IN ('8462-4','8453-3')),
+            m.measurement_source_value IN ('8462-4','8453-3', '271650006')),
         systb AS (SELECT
             person_id, measurement_datetime, value_as_number AS bp_systolic
             FROM `{dataset}.measurement` m
         WHERE
-            m.measurement_source_value IN ('8480-6','8459-0'))
+            m.measurement_source_value IN ('8480-6','8459-0', '271649006'))
         SELECT d.person_id,
                CAST(d.measurement_datetime AS DATE) AS measurement_date,
                bp_systolic,
