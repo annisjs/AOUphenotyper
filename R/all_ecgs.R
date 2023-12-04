@@ -22,7 +22,7 @@ all_ecgs <- function(dataset,output_folder,anchor_date_table=NULL,before=NULL,af
     WHERE
     ({ecg_terms})
   ")
-  result_all <- download_data(query)
+  result_all <- download_data(query,page_size=100000)
   result_all <- result_all[!duplicated(result_all[,c("person_id","measurement_date","concept_name")])]
   result_all[, concept_name := gsub("[{]|[}]|_by_ekg","",gsub(" |-|[.]","_",tolower(concept_name)))]
   result_all <- result_all[!duplicated(result_all[,c("person_id","measurement_date","concept_name")])]
