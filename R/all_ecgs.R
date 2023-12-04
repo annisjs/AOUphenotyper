@@ -14,7 +14,7 @@ all_ecgs <- function(dataset,output_folder,anchor_date_table=NULL,before=NULL,af
                 "Q-T interval corrected","QRS complex Ventricles by EKG","P wave Atrium by EKG","Heart rate.beat-to-beat by EKG",
                 "Q-T interval corrected based on Bazett formula","QRS duration {Electrocardiograph lead}","QRS axis",
                 "PP interval","R-R interval by EKG")
-  ecg_terms <- paste('c.concept_name LIKE ',"'",labs,"'",collapse=' OR ',sep="")
+  ecg_terms <- paste('c.concept_name LIKE ',"'",ecg_vars,"'",collapse=' OR ',sep="")
   query <- str_glue("
     SELECT person_id, measurement_date, value_as_number, c.concept_name
     FROM `{dataset}.measurement` m
