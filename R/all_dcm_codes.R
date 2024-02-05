@@ -27,8 +27,8 @@ all_dcm_codes <- function(dataset,output_folder,anchor_date_table=NULL,before=NU
     result_all <- result_all[condition_start_date >= min_window_date]
     result_all <- result_all[condition_start_date <= max_window_date]
   }
-  result_all <- setDT(result_all)[,.(cancer_status = length(condition_start_date) > 0,
-                                     cancer_entry_date = min(condition_start_date)),
+  result_all <- setDT(result_all)[,.(all_dcm_codes_status = length(condition_start_date) > 0,
+                                     all_dcm_codes_entry_date = min(condition_start_date)),
                                   .(person_id)]
   fwrite(result_all,file="all_dcm_codes.csv")
   system(str_glue("gsutil cp all_dcm_codes.csv {output_folder}/all_dcm_codes.csv"),intern=TRUE)
