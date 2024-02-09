@@ -11,7 +11,7 @@ first_medical_encounter <- function(dataset,output_folder,anchor_date_table=NULL
 {
   query <- str_glue("
         WITH ehr AS (
-        SELECT person_id, MAX(m.measurement_date) AS date
+        SELECT person_id, MIN(m.measurement_date) AS date
         FROM `measurement` AS m
         LEFT JOIN `measurement_ext` AS mm on m.measurement_id = mm.measurement_id
         WHERE LOWER(mm.src_id) LIKE 'ehr site%'
@@ -19,7 +19,7 @@ first_medical_encounter <- function(dataset,output_folder,anchor_date_table=NULL
 
         UNION DISTINCT
 
-        SELECT person_id, MAX(m.condition_start_date) AS date
+        SELECT person_id, MIN(m.condition_start_date) AS date
         FROM `condition_occurrence` AS m
         LEFT JOIN `condition_occurrence_ext` AS mm on m.condition_occurrence_id = mm.condition_occurrence_id
         WHERE LOWER(mm.src_id) LIKE 'ehr site%'
@@ -27,7 +27,7 @@ first_medical_encounter <- function(dataset,output_folder,anchor_date_table=NULL
 
         UNION DISTINCT
 
-        SELECT person_id, MAX(m.procedure_date) AS date
+        SELECT person_id, MIN(m.procedure_date) AS date
         FROM `procedure_occurrence` AS m
         LEFT JOIN `procedure_occurrence_ext` AS mm on m.procedure_occurrence_id = mm.procedure_occurrence_id
         WHERE LOWER(mm.src_id) LIKE 'ehr site%'
@@ -35,7 +35,7 @@ first_medical_encounter <- function(dataset,output_folder,anchor_date_table=NULL
 
         UNION DISTINCT
 
-        SELECT person_id, max(m.visit_end_date) AS date
+        SELECT person_id, MIN(m.visit_end_date) AS date
         FROM `visit_occurrence` AS m
         LEFT JOIN `visit_occurrence_ext` AS mm on m.visit_occurrence_id = mm.visit_occurrence_id
         WHERE LOWER(mm.src_id) LIKE 'ehr site%'
